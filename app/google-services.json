@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "234956282375",
+    "project_id": "web-scraper-electr-prices-test",
+    "storage_bucket": "web-scraper-electr-prices-test.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234956282375:android:169b294a2a65c2f1ff68a2",
+        "android_client_info": {
+          "package_name": "com.example.web_scraper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "234956282375-hba6ksmndv4en3e6jebhiobk7hc47cen.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJRdN1i9m8bd1XxMXglalWq6SKbVFUJCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "234956282375-hba6ksmndv4en3e6jebhiobk7hc47cen.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

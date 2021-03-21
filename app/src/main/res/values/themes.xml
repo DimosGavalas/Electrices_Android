@@ -1,0 +1,32 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.Web_scraper" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary_light</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/primary_light</item>
+        <item name="colorSecondaryVariant">@color/primary_dark</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+<!--    <style name="DatePickerTheme" parent="@android:style/Theme.Holo.Light.Dialog">-->
+<!--        <item name="colorAccent">#8D019C</item>-->
+<!--                <item name="android:colorControlNormal">@color/purple_700</item>-->
+<!--                <item name="android:background">#BF0D9840</item>-->
+<!--                <item name="android:textColorPrimary">#BFA8FFC5</item>-->
+<!--    </style>-->
+
+    <style name="DatePickerTheme" parent="android:Theme.Holo.Light.Dialog.NoActionBar.MinWidth">
+        <item name="colorAccent">#9C0101</item>
+        <item name="colorPrimary">#00C85A</item>
+        <item name="android:textColor">#FFF430</item>
+<!--        <item name="android:textColor">@color/purple_700</item>-->
+        <item name="android:background">@null</item>
+        <item name="android:textColorPrimary">#0028ED</item>
+    </style>
+</resources>

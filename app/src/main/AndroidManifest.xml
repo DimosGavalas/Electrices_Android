@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.electrices">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/electrices_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/electrices_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Web_scraper">
+        <activity android:name=".RadarChartActivity" />
+        <activity android:name=".PieChartActivity" />
+        <activity android:name=".BarChartActivity"
+            android:screenOrientation="landscape"/>
+        <activity android:name="com.example.electrices.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

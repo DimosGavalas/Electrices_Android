@@ -10,12 +10,19 @@
     android:paddingTop="0dp"
     tools:context=".BarChartActivity">
 
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="45dp"/>
+
     <Button
         android:id="@+id/datePickerButton"
         style="?android:spinnerStyle"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="JAN 01 2021"
+        android:text="Saturday, 01 JAN 2021"
         android:textColor="@color/primary_light"
         android:textSize="14sp"
         android:textStyle="bold"
@@ -23,13 +30,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/barChart"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="55dp"
-        android:layout_marginStart="5dp"/>
-
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/barChart"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="5dp"
+        android:paddingEnd="40dp"
+        android:paddingStart="5dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

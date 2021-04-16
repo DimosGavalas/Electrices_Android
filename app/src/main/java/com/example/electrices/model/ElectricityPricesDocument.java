@@ -13,6 +13,7 @@ public class ElectricityPricesDocument {
     // the class variables must be the same as in the firestore document.
     private String date;
     private String data_type;
+    private String day;
     private HashMap<String, Float> pricesPerHour;
 
 
@@ -31,8 +32,9 @@ public class ElectricityPricesDocument {
         return data_type;
     }
 
+    public String getDay(){return day;}
+
     public HashMap<String, Float> getPricesPerHour() {
         return pricesPerHour;
     }
-
 }

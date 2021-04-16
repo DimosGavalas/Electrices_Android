@@ -59,7 +59,7 @@ public class BarChartActivity extends AppCompatActivity {
         initDatePickerDialog();
         dateButtonSetup();
 
-        Log.i(TAG, "onCreate => " + getTodaysDateForFirestoreQuery());
+//        Log.i(TAG, "onCreate => " + getTodaysDateForFirestoreQuery());
 
         fireStoreConnection = new FireStoreConnection();
         fireStoreConnection.getDocumentForDate(getTodaysDateForFirestoreQuery());
@@ -83,8 +83,6 @@ public class BarChartActivity extends AppCompatActivity {
                 barChartConfig(barChart);
             }
         });
-
-
     }
     /* On Create END */
 
@@ -163,14 +161,14 @@ public class BarChartActivity extends AppCompatActivity {
     private void initDatePickerDialog(){
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+            public void onDateSet(DatePicker datePicker, int year, int month, int monthDay) {
                 month = month +1;
-                String date = makeDateString(day, month, year);
+                String date = makeDateString(year, month, monthDay);
                 dateButton.setText(date);
-                String firestoreDateQuery = makeDateStringForFirestoreQuery(day, month, year);
+                String firestoreDateQuery = makeDateStringForFirestoreQuery(monthDay, month, year);
 
                 //##############################################
-                Log.i(TAG, "onDataSet => " + firestoreDateQuery);
+//                Log.i(TAG, "onDataSet => " + firestoreDateQuery);
                 barEntries_prices.clear();
                 barChart.clear();
                 fireStoreConnection.getDocumentForDate(firestoreDateQuery);
@@ -181,11 +179,11 @@ public class BarChartActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int monthDay = cal.get(Calendar.DAY_OF_MONTH);
 
         int style = AlertDialog.THEME_HOLO_LIGHT;
 
-        datePickerDialog = new DatePickerDialog(this, style , dateSetListener, year, month, day);
+        datePickerDialog = new DatePickerDialog(this, style , dateSetListener, year, month, monthDay);
         // Styling the DatePicker
         DatePickerStyler.colorizeDatePicker(datePickerDialog.getDatePicker());
         datePickerDialog.getDatePicker().setMinDate(getDateInMillis( new int[]{2021, 2, 14})); // 2021 March 10
@@ -194,8 +192,15 @@ public class BarChartActivity extends AppCompatActivity {
 
     }
 
-    private String makeDateString(int day, int month, int year) {
-        return getMonthFormat(month) + " " + day + ", " + year;
+    private String makeDateString(int year, int month, int monthDay) {
+        return getWeekDayFromDate(year, month, monthDay) + ",  " + monthDay + " " + getMonthFormat(month) + ", " + year;
+    }
+
+    private String getWeekDayFromDate(int year, int month, int monthDay){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month-1, monthDay);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        return getWeekDayFormat(dayOfWeek);
     }
 
     private String makeDateStringForFirestoreQuery(int day, int month, int year){
@@ -244,6 +249,26 @@ public class BarChartActivity extends AppCompatActivity {
         return "NaN";
     }
 
+    private String getWeekDayFormat(int dayOfWeek){
+        if(dayOfWeek == 1)
+            return "Sunday";
+        if(dayOfWeek == 2)
+            return "Monday";
+        if(dayOfWeek == 3)
+            return "Tuesday";
+        if(dayOfWeek == 4)
+            return "Wednesday";
+        if(dayOfWeek == 5)
+            return "Thursday";
+        if(dayOfWeek == 6)
+            return "Friday";
+        if (dayOfWeek == 7)
+            return "Saturday";
+
+        // Default should never happen
+        return "NaN";
+    }
+
     private void dateButtonSetup(){
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,8 +284,8 @@ public class BarChartActivity extends AppCompatActivity {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         month += 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(day, month, year);
+        int monthDay = cal.get(Calendar.DAY_OF_MONTH);
+        return makeDateString(year, month, monthDay);
     }
 
     private String getTodaysDateForFirestoreQuery(){

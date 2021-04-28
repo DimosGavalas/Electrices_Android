@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Electrices</string>
     <string name="bar_chart">See Prices</string>
+    <string name="price_hours">PRICE HOURS ( Mon/01 Jan/2021 )</string>
+    <string name="scheduled_d">SCHEDULED DEVICES</string>
+
 </resources>

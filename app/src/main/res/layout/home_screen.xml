@@ -8,7 +8,7 @@
     android:background="@drawable/home_screen_stats"
     android:clipToOutline="true"
     android:orientation="vertical"
-    tools:context=".utilities.StatisticsPricesActivity"
+    tools:context=".utilities.HomeActivity"
     >
 
     <!--        top field with the logo-->

@@ -8,7 +8,7 @@
     android:paddingEnd="10dp"
     android:paddingBottom="10dp"
     android:paddingTop="0dp"
-    tools:context=".BarChartActivity">
+    tools:context=".Activities.BarChartActivity">
 
 
     <com.github.mikephil.charting.charts.BarChart

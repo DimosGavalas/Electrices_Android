@@ -1,4 +1,4 @@
-package com.example.electrices;
+package com.example.electrices.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.example.electrices.MPchartsCustom.CustomMarkerView;
+import com.example.electrices.R;
 import com.example.electrices.model.ElectricityPricesDocument;
 import com.example.electrices.utilities.DatePickerStyler;
 import com.example.electrices.utilities.FireStoreConnection;
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 

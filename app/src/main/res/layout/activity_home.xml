@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Wireframe from Home Srceen V04 -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_srceen"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    tools:context=".Activities.HomeActivity">
+
+    <!-- top field with the logo-->
+
+    <LinearLayout
+        android:id="@+id/logo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.19"
+        android:orientation="vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:src="@drawable/electrices_logo02" />
+    </LinearLayout>
+
+    <!-- Buttons below logo -->
+
+    <LinearLayout
+        android:id="@+id/devices_prices_layout"
+        app:layout_constraintTop_toBottomOf="@+id/logo_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.1"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
+        android:gravity="center_horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button"
+            android:stateListAnimator="@null"
+            android:id="@+id/button_appliances"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="6dp"
+            android:text="APPLIANCES"
+            android:textSize="16sp"
+            app:elevation="4dp"
+            />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_prices_barChart"
+            android:layout_width="175dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="6dp"
+            android:text="PRICES"
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/statistics_card_layout"
+        app:layout_constraintTop_toBottomOf="@+id/devices_prices_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.38"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="24dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:cardMaxElevation="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_card_titles"
+                android:elevation="4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/price_hours"
+                android:textAppearance="@style/price_hours" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <View
+                    android:id="@+id/pie_chart_statistics"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ListView
+                    android:id="@+id/prices_list_stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/scheduled_appliances_card_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginVertical="24dp"
+        app:cardBackgroundColor="@color/card_background"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="4dp"
+        app:cardMaxElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintTop_toBottomOf="@+id/statistics_card_layout"
+        tools:layout_editor_absoluteX="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_card_titles"
+                android:elevation="4dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="@string/scheduled_d"
+                android:textAppearance="@style/price_hours" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="4dp">
+
+                <ListView
+                    android:id="@+id/scheduled_devices_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

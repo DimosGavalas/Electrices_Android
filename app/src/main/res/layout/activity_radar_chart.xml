@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".RadarChartActivity">
+    tools:context=".Activities.RadarChartActivity">
 
     <com.github.mikephil.charting.charts.RadarChart
         android:id="@+id/radarChart"

@@ -1,10 +1,11 @@
-package com.example.electrices;
+package com.example.electrices.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.example.electrices.R;
 import com.github.mikephil.charting.charts.RadarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.RadarData;

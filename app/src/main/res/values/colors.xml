@@ -15,19 +15,21 @@
     <color name="pgreen">#BF1F7E22</color>
     <!-- BarChart - Axes colors -->
     <color name="gray_50">#BFDFDFDF</color>
+    <color name="gray_100">#B3B2B2</color>
     <color name="gray_200">#A1A1A1</color>
 
     <!-- Pie Chart colors -->
     <color name="low_prices">#6EB65C</color>
     <color name="medium_prices">#F5C724</color>
     <color name="high_prices">#FE5050</color>
+    <color name="all_prices">#C8CFB4</color>
     
     <!-- Cards background color -->
     <color name="card_background">#FBFFF5</color>
 
     <color name="buttons_and_card_titles">#428C53</color>
 
-    <color name="letters_dark">#0E3629</color>
+    <color name="letters_dark">#5B6864</color>
     <color name="letters_light">#FBFFF5</color>
 
 </resources>

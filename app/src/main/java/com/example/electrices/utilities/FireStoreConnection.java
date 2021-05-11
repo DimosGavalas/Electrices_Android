@@ -4,7 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.electrices.model.ElectricityPricesDocument;
+import com.example.electrices.model.PricesDocument;
+import com.example.electrices.model.StatisticsDocument;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -33,12 +34,13 @@ public class FireStoreConnection {
      * To solve this problem ....
      **/
     public interface DocumentListener{
-        void onDocumentReady(ElectricityPricesDocument document);
+        <D> void onDocumentReady(D document);
     }
     private DocumentListener documentListener;
 
     private static final String TAG = "FIRESTORE-CONNECTION";
     private static final String COLLECTION = "electricityPrices";
+    private static final String STATISTICS_COLLECTION = "electricityPrices-stats";
 
     private FirebaseFirestore ffDatabase;
 
@@ -81,14 +83,37 @@ public class FireStoreConnection {
         querySelectedDatePrices
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    ElectricityPricesDocument electricityPricesDocument = new ElectricityPricesDocument();
+                    PricesDocument pricesDocument = new PricesDocument();
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                electricityPricesDocument = document.toObject(ElectricityPricesDocument.class); // Can return this object and pass it to another class.
+                                pricesDocument = document.toObject(PricesDocument.class); // Can return this object and pass it to another class.
                                 if (documentListener != null){
-                                    documentListener.onDocumentReady(electricityPricesDocument);
+                                    documentListener.onDocumentReady(pricesDocument);
+                                }
+//                                Log.i(TAG, document.getId() + " => " + document.getData());
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void getStatisticsDocumentForDate(String date){
+        Query querySelectedDatePrices = ffDatabase.collection(STATISTICS_COLLECTION).whereEqualTo("date", date);
+        querySelectedDatePrices
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    StatisticsDocument statisticsDocument = new StatisticsDocument();
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                statisticsDocument = document.toObject(StatisticsDocument.class); // Can return this object and pass it to another class.
+                                if (documentListener != null){
+                                    documentListener.onDocumentReady(statisticsDocument);
                                 }
 //                                Log.i(TAG, document.getId() + " => " + document.getData());
                             }
@@ -102,4 +127,6 @@ public class FireStoreConnection {
     public void setDocumentListener(DocumentListener documentListener) {
         this.documentListener = documentListener;
     }
+
+
 }

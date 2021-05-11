@@ -4,4 +4,9 @@
     <string name="price_hours">PRICE HOURS ( Mon/01 Jan/2021 )</string>
     <string name="scheduled_d">SCHEDULED DEVICES</string>
 
+    <string name="all_prices_label">ALL</string>
+    <string name="low_prices_label">LOW</string>
+    <string name="medium_prices_label">MED.</string>
+    <string name="high_prices_label">HIGH</string>
+
 </resources>

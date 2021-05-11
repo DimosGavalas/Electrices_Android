@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/low_prices">
+    <item
+        android:id="@+id/ripple_mask"
+        android:gravity="center">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/card_background"/>
+        </shape>
+    </item>
+</ripple>

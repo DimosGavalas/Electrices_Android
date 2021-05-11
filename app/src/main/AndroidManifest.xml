@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Web_scraper">
         <activity android:name=".Activities.RadarChartActivity" />
-        <activity android:name=".Activities.PieChartActivity" />
+        <activity android:name=".Activities.PieChartActivityTest" />
         <activity android:name=".Activities.BarChartActivity"
             android:screenOrientation="landscape"/>
         <activity android:name="com.example.electrices.Activities.HomeActivity">

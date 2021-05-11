@@ -16,9 +16,9 @@
         android:id="@+id/logo_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.19"
+        app:layout_constraintHeight_percent="0.185"
         android:orientation="vertical"
-        android:paddingTop="16dp"
+        android:paddingTop="24dp"
         android:paddingBottom="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,22 +38,19 @@
         app:layout_constraintTop_toBottomOf="@+id/logo_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintHeight_percent="0.08"
         android:orientation="horizontal"
         android:paddingHorizontal="4dp"
         android:gravity="center_horizontal">
 
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
-            android:stateListAnimator="@null"
             android:id="@+id/button_appliances"
             android:layout_width="175dp"
             android:layout_height="match_parent"
             android:layout_marginEnd="6dp"
             android:text="APPLIANCES"
-            android:textSize="16sp"
-            app:elevation="4dp"
-            />
+            android:textSize="14sp" />
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_prices_barChart"
@@ -61,7 +58,7 @@
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
             android:text="PRICES"
-            android:textSize="16sp"/>
+            android:textSize="14sp"/>
     </LinearLayout>
 
     <androidx.cardview.widget.CardView
@@ -69,12 +66,13 @@
         app:layout_constraintTop_toBottomOf="@+id/devices_prices_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.38"
+        app:layout_constraintHeight_percent="0.45"
         android:layout_marginHorizontal="4dp"
-        android:layout_marginVertical="24dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="6dp"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
+        app:cardElevation="2dp"
         app:cardMaxElevation="8dp">
 
         <LinearLayout
@@ -82,14 +80,85 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/bg_card_titles"
-                android:elevation="4dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="@string/price_hours"
-                android:textAppearance="@style/price_hours" />
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:background="@drawable/bg_card_titles">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:gravity="end|center_vertical"
+                    android:text="PRICE HOURS - "
+                    android:textAppearance="@style/price_hours" />
+
+                <TextView
+                    android:id="@+id/statistics_table_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:text="Mon, 01 Jan 2021"
+                    android:textAppearance="@style/price_hours" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/statistics_titles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:weightSum="2">
+
+                <TextView
+                    android:id="@+id/pie_chart_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Prices Distribution"
+                    android:textColor="@color/letters_dark"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Price Hours"
+                        android:textColor="@color/letters_dark"
+                        android:layout_gravity="center_vertical"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/button_dropdown_price_levels"
+                        style="@style/Widget.MaterialComponents.Button.Icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="38dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:paddingEnd="0dp"
+                        android:backgroundTint="@color/all_prices"
+                        android:gravity="start|center_vertical"
+                        app:icon="@drawable/ic_drop_down_arrow_24"
+                        app:iconGravity="textEnd"
+                        app:iconPadding="2dp"
+                        android:text="@string/all_prices_label"
+                        android:textSize="12sp" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -97,17 +166,179 @@
                 android:orientation="horizontal"
                 android:weightSum="2">
 
-                <View
-                    android:id="@+id/pie_chart_statistics"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/chart_area"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-                <ListView
-                    android:id="@+id/prices_list_stats"
+
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pie_chart_statistics"
+                        app:layout_constraintTop_toTopOf="@+id/chart_area"
+                        app:layout_constraintBottom_toTopOf="@+id/chart_label_values"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginHorizontal="2dp"
+                        android:elevation="4dp"
+                        android:translationZ="4dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/chart_label_values"
+                        app:layout_constraintBottom_toBottomOf="@+id/chart_area"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="8dp"
+                        android:gravity="center"
+                        android:layout_marginBottom="20dp"
+                        android:weightSum="3">
+
+                        <TextView
+                            android:id="@+id/label_percent_low"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="32dp"
+                            android:paddingHorizontal="2dp"
+                            android:background="@drawable/bg_label_low_prices"
+                            android:text="...%"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/label_percent_medium"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="32dp"
+                            android:paddingHorizontal="2dp"
+                            android:background="@drawable/bg_label_medium_prices"
+                            android:layout_marginHorizontal="4dp"
+                            android:text="...%"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:gravity="center"/>
+
+                        <TextView
+                            android:id="@+id/label_percent_high"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="32dp"
+                            android:paddingHorizontal="2dp"
+                            android:background="@drawable/bg_label_high_prices"
+                            android:text="...%"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                            android:textColor="@color/white"
+                            android:gravity="center"/>
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/statistics_table_area"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1">
+
+
+                    <LinearLayout
+                        android:id="@+id/timeframes_table"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_constraintTop_toTopOf="@+id/statistics_table_area"
+                        android:layout_marginTop="9dp"
+                        android:layout_marginEnd="12dp">
+
+                        <View
+                            android:id="@+id/divider1"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/gray_50"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cardElevation="4dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:weightSum="3"
+                                android:paddingVertical="4dp"
+                                android:background="@drawable/bg_cards">
+
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:gravity="center"
+                                    android:layout_gravity="top"
+                                    android:text="Time- frame"
+                                    android:textSize="10sp"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:gravity="center"
+                                    android:layout_gravity="top"
+                                    android:text="Avg. Ore/KWh"
+                                    android:textSize="10sp"/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:layout_marginHorizontal="2dp"
+                                    android:gravity="center"
+                                    android:layout_gravity="top"
+                                    android:text="Price level"
+                                    android:textSize="10sp"/>
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+
+<!--                        <View-->
+<!--                            android:id="@+id/divider0"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="1.5dp"-->
+<!--                            android:layout_marginStart="4dp"-->
+<!--                            android:layout_marginEnd="12dp"-->
+<!--                            android:background="@color/gray_50"/>-->
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="20dp"
+                            app:cardElevation="1dp"
+                            android:background="@drawable/bg_cards">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recycler_view_statistics_home_activity"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:paddingHorizontal="4dp"
+                                android:background="@drawable/bg_cards"
+                                app:layout_constraintTop_toTopOf="@+id/timeframes_table" />
+
+                        </androidx.cardview.widget.CardView>
+
+                    </LinearLayout>
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -117,14 +348,14 @@
         android:id="@+id/scheduled_appliances_card_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.22"
         android:layout_marginHorizontal="4dp"
-        android:layout_marginVertical="24dp"
+        android:layout_marginVertical="6dp"
         app:cardBackgroundColor="@color/card_background"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
+        app:cardElevation="2dp"
         app:cardMaxElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHeight_percent="0.3"
         app:layout_constraintTop_toBottomOf="@+id/statistics_card_layout"
         tools:layout_editor_absoluteX="4dp">
 
@@ -137,7 +368,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@drawable/bg_card_titles"
-                android:elevation="4dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="@string/scheduled_d"
                 android:textAppearance="@style/price_hours" />

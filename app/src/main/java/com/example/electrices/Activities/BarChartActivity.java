@@ -12,7 +12,8 @@ import android.widget.DatePicker;
 
 import com.example.electrices.MPchartsCustom.CustomMarkerView;
 import com.example.electrices.R;
-import com.example.electrices.model.ElectricityPricesDocument;
+import com.example.electrices.model.PricesDocument;
+import com.example.electrices.utilities.CustomDateUtility;
 import com.example.electrices.utilities.DatePickerStyler;
 import com.example.electrices.utilities.FireStoreConnection;
 import com.github.mikephil.charting.charts.BarChart;
@@ -27,7 +28,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -40,8 +40,8 @@ public class BarChartActivity extends AppCompatActivity {
             "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00",
             "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00"};
     private FireStoreConnection fireStoreConnection;
-    private FirebaseFirestore ffdatabase;
-    public ElectricityPricesDocument electricityPricesDocument;
+    private CustomDateUtility customDateUtility;
+    public PricesDocument pricesDocument;
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
 
@@ -55,23 +55,26 @@ public class BarChartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bar_chart);
+
         barChart = findViewById(R.id.barChart);
         dateButton = findViewById(R.id.datePickerButton);
 
+        customDateUtility = new CustomDateUtility();
         initDatePickerDialog();
         dateButtonSetup();
 
 //        Log.i(TAG, "onCreate => " + getTodaysDateForFirestoreQuery());
 
         fireStoreConnection = new FireStoreConnection();
-        fireStoreConnection.getDocumentForDate(getTodaysDateForFirestoreQuery());
+        fireStoreConnection.getDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
+//        fireStoreConnection.getDocumentForDate(getTodaysDateForFirestoreQuery());
 
         // When the above method finishes the below listener will fire up.
         // This means that the barchart will be constructed and show up when the data has been downloaded.
         fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener(){
             @Override
-            public void onDocumentReady(ElectricityPricesDocument document) {
-                electricityPricesDocument = document;
+            public <D> void onDocumentReady(D document) {
+                pricesDocument = (PricesDocument) document;
                 Log.i(TAG, "onDocumentReady => " + String.valueOf(document));
 
                 barEntries_prices = barEntriesSetup();
@@ -81,7 +84,6 @@ public class BarChartActivity extends AppCompatActivity {
 
                 barData = new BarData(barDataSet);
                 barChart.setData(barData);
-//                barChart.clear();
                 barChartConfig(barChart);
             }
         });
@@ -91,8 +93,9 @@ public class BarChartActivity extends AppCompatActivity {
     private ArrayList<BarEntry> barEntriesSetup(){
         ArrayList<BarEntry> barEntries = new ArrayList<>();
 
-        HashMap<String,Float> pricesPerHour = electricityPricesDocument.getPricesPerHour();
-//        Log.i(TAG, String.valueOf(electricityPricesDocument.getDate()));
+        HashMap<String,Float> pricesPerHour = pricesDocument.getPricesPerHour();
+//        Log.i(TAG, String.valueOf(pricesDocument.getDate()));
+//        Log.i(TAG, String.valueOf(pricesDocument.getDay()));
 //        Log.i(TAG, String.valueOf(pricesPerHour));
         int noOfBarEntry = 0;
         for (String timeOfDay : timeOfDayLabels){
@@ -164,111 +167,31 @@ public class BarChartActivity extends AppCompatActivity {
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int monthDay) {
-                month = month +1;
-                String date = makeDateString(year, month, monthDay);
+                month = month + 1; // The date picker returns always months that start from zero.
+                String date = customDateUtility.makeDateString(year, month, monthDay);
                 dateButton.setText(date);
-                String firestoreDateQuery = makeDateStringForFirestoreQuery(monthDay, month, year);
+                String firestoreDateQuery = customDateUtility.makeDateStringForFirestoreQuery(year, month, monthDay);
 
                 //##############################################
-//                Log.i(TAG, "onDataSet => " + firestoreDateQuery);
+                Log.i(TAG, "onDataSet => " + firestoreDateQuery);
                 barEntries_prices.clear();
                 barChart.clear();
                 fireStoreConnection.getDocumentForDate(firestoreDateQuery);
             }
         };
 
-
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int monthDay = cal.get(Calendar.DAY_OF_MONTH);
-
         int style = AlertDialog.THEME_HOLO_LIGHT;
+        int year = customDateUtility.getYear();
+        int month = customDateUtility.getMonth();
+        Log.i(TAG , "Month => " + month);
+        int monthDay = customDateUtility.getMonthDay();
 
         datePickerDialog = new DatePickerDialog(this, style , dateSetListener, year, month, monthDay);
         // Styling the DatePicker
         DatePickerStyler.colorizeDatePicker(datePickerDialog.getDatePicker());
-        datePickerDialog.getDatePicker().setMinDate(getDateInMillis( new int[]{2021, 2, 14})); // 2021 March 10
-//        datePickerDialog.getDatePicker().setMinDate(getDateInMillis(getTodaysDateWithOffset(0,0,-3)));
-        datePickerDialog.getDatePicker().setMaxDate(getDateInMillis(getTodaysDateWithOffset(0,0,1)));
-
-    }
-
-    private String makeDateString(int year, int month, int monthDay) {
-        return getWeekDayFromDate(year, month, monthDay) + ",  " + monthDay + " " + getMonthFormat(month) + ", " + year;
-    }
-
-    private String getWeekDayFromDate(int year, int month, int monthDay){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month-1, monthDay);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        return getWeekDayFormat(dayOfWeek);
-    }
-
-    private String makeDateStringForFirestoreQuery(int day, int month, int year){
-        String monthString = String.valueOf(month);
-        String dayString = String.valueOf(day);
-        if(day < 10 && month >= 10){ // Only day is below ten
-            dayString = String.format("0%s", dayString);
-        }
-        if(month < 10 && day >= 10){ // Only month is below ten
-            monthString = String.format("0%s", monthString);
-        }
-        if(day < 10 && month < 10){ // Both day and month are below ten
-            dayString = String.format("0%s", dayString);
-            monthString = String.format("0%s", monthString);
-        }
-        return String.format(Locale.ENGLISH,"%d-%s-%s", year, monthString, dayString);
-    }
-
-    private String getMonthFormat(int month) {
-        if(month == 1)
-            return "JAN";
-        if(month == 2)
-            return "FEB";
-        if(month == 3)
-            return "MAR";
-        if(month == 4)
-            return "APR";
-        if(month == 5)
-            return "MAY";
-        if(month == 6)
-            return "JUN";
-        if(month == 7)
-            return "JUL";
-        if(month == 8)
-            return "AUG";
-        if(month == 9)
-            return "SEP";
-        if(month == 10)
-            return "OCT";
-        if(month == 11)
-            return "NOV";
-        if(month == 12)
-            return "DEC";
-
-        // Default should never happen
-        return "NaN";
-    }
-
-    private String getWeekDayFormat(int dayOfWeek){
-        if(dayOfWeek == 1)
-            return "Sunday";
-        if(dayOfWeek == 2)
-            return "Monday";
-        if(dayOfWeek == 3)
-            return "Tuesday";
-        if(dayOfWeek == 4)
-            return "Wednesday";
-        if(dayOfWeek == 5)
-            return "Thursday";
-        if(dayOfWeek == 6)
-            return "Friday";
-        if (dayOfWeek == 7)
-            return "Saturday";
-
-        // Default should never happen
-        return "NaN";
+        datePickerDialog.getDatePicker().setMinDate(customDateUtility.getDateInMillis( new int[]{2021, 2, 14})); // 2021 March 10
+        // Max date of the date picker is always the next day from today.
+        datePickerDialog.getDatePicker().setMaxDate(customDateUtility.getDateInMillis(customDateUtility.getTodaysDateWithOffset(0,0,1)));
     }
 
     private void dateButtonSetup(){
@@ -278,42 +201,7 @@ public class BarChartActivity extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
-        dateButton.setText(getTodaysDate());
+        dateButton.setText(customDateUtility.getTodaysDate());
     }
 
-    private String getTodaysDate(){
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month += 1;
-        int monthDay = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateString(year, month, monthDay);
-    }
-
-    private String getTodaysDateForFirestoreQuery(){
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        month += 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        return makeDateStringForFirestoreQuery(day, month, year);
-    }
-
-    private int[] getTodaysDateWithOffset(int yearsOffset, int monthsOffset, int daysOffset){
-        Calendar cal = Calendar.getInstance();
-        int[] dateArray = new int[3];
-        int year = cal.get(Calendar.YEAR) + yearsOffset;
-        int month = cal.get(Calendar.MONTH) + monthsOffset;
-        int day = cal.get(Calendar.DAY_OF_MONTH) + daysOffset;
-        dateArray[0] = year;
-        dateArray[1] = month;
-        dateArray[2] = day;
-        return dateArray;
-    }
-
-    private long getDateInMillis(int[] date){
-        Calendar cal = Calendar.getInstance();
-        cal.set(date[0], date[1], date[2]);
-        return cal.getTimeInMillis();
-    }
 }

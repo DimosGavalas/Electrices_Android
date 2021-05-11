@@ -71,6 +71,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.button_appliances).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), DevicesActivity.class));
+            }
+        });
+
         customDateUtility = new CustomDateUtility();
 
         MaterialButton button_drop_down = findViewById(R.id.button_dropdown_price_levels);

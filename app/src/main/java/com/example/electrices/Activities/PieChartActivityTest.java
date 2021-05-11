@@ -14,12 +14,12 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-public class PieChartActivity extends AppCompatActivity {
+public class PieChartActivityTest extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pie_chart);
+        setContentView(R.layout.activity_pie_chart_test);
 
         PieChart pieChart = findViewById(R.id.pieChart);
 

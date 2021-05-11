@@ -7,32 +7,35 @@ import java.util.HashMap;
  * It holds the electricity prices of a SPECIFIC date.
  * Tutorial: https://www.youtube.com/watch?v=jJnm3YKfAUI&list=PLrnPJCHvNZuDrSqu-dKdDi3Q6nM-VUyxD&index=8
  **/
-public class ElectricityPricesDocument {
+public class PricesDocument extends FirestoreDocument{
 
     // Note! to save a document directly from firestore as an instance of this class, the names of
     // the class variables must be the same as in the firestore document.
     private String date;
-    private String data_type;
     private String day;
+    private String data_type;
     private HashMap<String, Float> pricesPerHour;
 
 
-    public ElectricityPricesDocument(){
+    public PricesDocument(){
         // !! Don't Remove !!
         // Empty constructor used for the firestore document.toObject() method.
     }
 
-
-
+    @Override
     public String getDate() {
         return date;
     }
 
+    @Override
+    public String getDay() {
+        return day;
+    }
+
+
     public String getData_type() {
         return data_type;
     }
-
-    public String getDay(){return day;}
 
     public HashMap<String, Float> getPricesPerHour() {
         return pricesPerHour;

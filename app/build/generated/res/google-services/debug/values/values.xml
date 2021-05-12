@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">570490385032-p68l4sh53p1sie3gfgnr5e211m9ou8rb.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">570490385032</string>
+    <string name="google_api_key" translatable="false">AIzaSyB-9E67K-M_5zliO-f_2WV4zIpInmJJTao</string>
+    <string name="google_app_id" translatable="false">1:570490385032:android:92e9f4dc797d77aa66253d</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyB-9E67K-M_5zliO-f_2WV4zIpInmJJTao</string>
+    <string name="google_storage_bucket" translatable="false">angular-stacker-309310.appspot.com</string>
+    <string name="project_id" translatable="false">angular-stacker-309310</string>
+</resources>

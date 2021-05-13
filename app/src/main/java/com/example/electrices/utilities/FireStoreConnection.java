@@ -52,6 +52,7 @@ public class FireStoreConnection {
     private void openDBConnection(){
         // Access a Cloud Firestore instance from your Activity
         ffDatabase = FirebaseFirestore.getInstance();
+        Log.i(TAG, String.valueOf(ffDatabase.getApp()));
     }
 
 

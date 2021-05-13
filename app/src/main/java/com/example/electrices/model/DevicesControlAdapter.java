@@ -89,7 +89,7 @@ public class DevicesControlAdapter extends RecyclerView.Adapter<DevicesControlAd
                 @Override
                 public void onClick(View v) {
                     RequestQueue requestQueue = Volley.newRequestQueue(context);
-                    String urlStartCoffee = "http://83.95.169.116/startappliance";
+                    String urlStartCoffee = "http://83.95.169.116:5000/api/startMachine";
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlStartCoffee, null, new Response.Listener<JSONObject>() {
 
@@ -109,14 +109,80 @@ public class DevicesControlAdapter extends RecyclerView.Adapter<DevicesControlAd
                 }
             });
 
-
-
-
-
-
             stopDeviceTxt = itemView.findViewById(R.id.stop_device_button);
+            stopDeviceTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestQueue requestQueue = Volley.newRequestQueue(context);
+                    String urlStopCoffee = "http://83.95.169.116:5000/api/stopMachine";
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlStopCoffee, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(context, "Turned OFF", Toast.LENGTH_SHORT).show();
+                        }
+                    } , new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
+                            Log.i("adapter", String.valueOf(error));
+
+                        }
+                    });
+                    requestQueue.add(jsonObjectRequest);
+                }
+            });
+
             warmWaterTxt = itemView.findViewById(R.id.warm_water_button);
+            warmWaterTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestQueue requestQueue = Volley.newRequestQueue(context);
+                    String urlWarmWater = "http://83.95.169.116:5000/api/hotWater";
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlWarmWater, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(context, "Pouring hot water", Toast.LENGTH_SHORT).show();
+                        }
+                    } , new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
+                            Log.i("adapter", String.valueOf(error));
+
+                        }
+                    });
+                    requestQueue.add(jsonObjectRequest);
+                }
+            });
+
             coldWaterTxt = itemView.findViewById(R.id.cold_water_button);
+            coldWaterTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RequestQueue requestQueue = Volley.newRequestQueue(context);
+                    String urlColdWater = "http://83.95.169.116:5000/api/coldWater";
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlColdWater, null, new Response.Listener<JSONObject>() {
+
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(context, "Pouring cold water", Toast.LENGTH_SHORT).show();
+                        }
+                    } , new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(context, "ERROR", Toast.LENGTH_SHORT).show();
+                            Log.i("adapter", String.valueOf(error));
+
+                        }
+                    });
+                    requestQueue.add(jsonObjectRequest);
+                }
+            });
 
             //the layouts
             linearLayout = itemView.findViewById(R.id.row_linear_layout);

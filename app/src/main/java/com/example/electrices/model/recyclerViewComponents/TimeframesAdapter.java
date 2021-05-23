@@ -1,4 +1,4 @@
-package com.example.electrices.utilities.recyclerViewComponents;
+package com.example.electrices.model.recyclerViewComponents;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -11,9 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.R;
+import com.example.electrices.model.StatisticsDocument;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -43,12 +43,16 @@ public class TimeframesAdapter extends RecyclerView.Adapter<TimeframesAdapter.Vi
         }
     }
 
+//################# End of ViewHolder Class ###########################################
+
+
     // Store a member variable for the timeframes.
-    private ArrayList<Map<String, Object>> mTimeframes;
+//    private ArrayList<Map<String, Object>> mTimeframes;
+    private ArrayList<StatisticsDocument.Timeframe> mTimeframes;
     private Resources resources;
 
     // Pass in the timeframes array into the constructor.
-    public TimeframesAdapter(ArrayList<Map<String, Object>> timeframes) {
+    public TimeframesAdapter(ArrayList<StatisticsDocument.Timeframe> timeframes) {
         mTimeframes = timeframes;
     }
 
@@ -60,7 +64,6 @@ public class TimeframesAdapter extends RecyclerView.Adapter<TimeframesAdapter.Vi
         LayoutInflater inflater = LayoutInflater.from(context);
 
         resources = context.getResources();
-
 
         // Inflate the custom layout
         View timeframeView = inflater.inflate(R.layout.recycler_view_timeframe_item, parent, false);
@@ -74,12 +77,14 @@ public class TimeframesAdapter extends RecyclerView.Adapter<TimeframesAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         // Get the data model based on position.
-        Map<String, Object> timeframeItem = mTimeframes.get(position);
+       StatisticsDocument.Timeframe timeframeItem = mTimeframes.get(position);
 
         // Set item views based on your views and data model
-        viewHolder.timeframeTV.setText((String) timeframeItem.get("timeframe"));
-        viewHolder.avgPriceTV.setText((String) String.valueOf(timeframeItem.get("average")));
-        String priceLevel = (String) timeframeItem.get("price_level");
+        viewHolder.timeframeTV.setText(timeframeItem.getTimeframe());
+        viewHolder.avgPriceTV.setText(String.valueOf(timeframeItem.getAverage()));
+        String priceLevel = timeframeItem.getPrice_level();
+
+
         viewHolder.priceLevelTV.setText(priceLevel );
         if(priceLevel.equals("low")){
             viewHolder.priceLevelTV.setBackground(resources.getDrawable(R.drawable.bg_label_low_prices));

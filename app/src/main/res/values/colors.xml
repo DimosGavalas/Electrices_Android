@@ -23,13 +23,21 @@
     <color name="medium_prices">#F5C724</color>
     <color name="high_prices">#FE5050</color>
     <color name="all_prices">#C8CFB4</color>
-    
-    <!-- Cards background color -->
+
+    <!-- Backgrounds  -->
     <color name="card_background">#FBFFF5</color>
+    <color name="selected_background">#59BCE3BE</color>
 
     <color name="buttons_and_card_titles">#428C53</color>
 
+    <!-- Letters  -->
     <color name="letters_dark">#5B6864</color>
     <color name="letters_light">#FBFFF5</color>
+
+    <!-- Vector Images -->
+    <color name="appliances">#B3909090</color>
+
+    <!-- Popup dim background -->
+    <color name="pupup_window_background">#B3000000</color>
 
 </resources>

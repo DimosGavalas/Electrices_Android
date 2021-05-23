@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="3dp"
+    app:cardMaxElevation="4dp"
+    app:cardUseCompatPadding="true"
+    android:padding="12dp"
+    app:cardBackgroundColor="@color/card_background">
+
+    <LinearLayout
+        android:id="@+id/row_linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/appliance_image"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:src="@drawable/appliance_image_washing_machine_254"/>
+
+            <TextView
+                android:id="@+id/device_item_from_list"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/appliance_image"
+                android:text="Coffee Machine"
+                android:textSize="18sp"
+                android:padding="16dp"
+                android:textColor="@color/letters_dark"
+                />
+
+            <ImageButton
+                android:id="@+id/card_toggler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/card_background"
+                android:src="@drawable/arrow_down_gray_32"/>
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/expandable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1.5dp"
+                android:background="@color/appliances"
+                android:layout_marginBottom="16dp"/>
+
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/divider"
+                android:columnCount="3"
+                android:rowCount="5"
+                android:orientation="horizontal">
+
+<!--                Titles -->
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_marginBottom="16dp"
+                    android:text="Operational Modes"/>
+
+                <TextView
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="12dp"
+                    android:text="Working Cycle"/>
+
+                <TextView
+                    android:id="@+id/start_now"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:text="Start Now"/>
+
+<!--                Row One -->
+                <TextView
+                    android:id="@+id/label_operational_mode_start"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:text="Start"/>
+
+                <TextView
+                    android:id="@+id/working_cycle_start"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="4dp"
+                    android:text="----"/>
+
+                <ImageButton
+                    android:id="@+id/button_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="@color/card_background"
+                    android:src="@drawable/vector_on_off_button_42"
+                    android:tint="@color/high_prices" />
+
+<!--                Row Two -->
+                <TextView
+                    android:id="@+id/label_operational_mode_stop"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:text="Stop"/>
+
+                <TextView
+                    android:id="@+id/working_cycle_stop"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:paddingStart="4dp"
+                    android:text="----"/>
+
+                <ImageButton
+                    android:id="@+id/button_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="@color/card_background"
+                    android:src="@drawable/vector_on_off_button_42"
+                    android:tint="@color/high_prices" />
+
+<!--                Row Three -->
+                <TextView
+                    android:id="@+id/label_operational_mode_3"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:text="Mode 3"/>
+
+                <TextView
+                    android:id="@+id/working_cycle_mode3"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="3h"/>
+
+                <ImageButton
+                    android:id="@+id/button_mode3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="@color/card_background"
+                    android:src="@drawable/vector_on_off_button_42"
+                    android:tint="@color/high_prices"/>
+
+<!--                Row Four -->
+                <TextView
+                    android:id="@+id/label_operational_mode_4"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:text="Mode 4"/>
+
+                <TextView
+                    android:id="@+id/working_cycle_mode4"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="12dp"
+                    android:text="1h"/>
+
+                <ImageButton
+                    android:id="@+id/button_mode4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="2dp"
+                    android:backgroundTint="@color/card_background"
+                    android:src="@drawable/vector_on_off_button_42"
+                    android:tint="@color/high_prices" />
+
+            </GridLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_below="@+id/divider"
+                android:layout_alignParentEnd="true">
+                <TextView
+                    android:id="@+id/shcedule_title"
+                    android:layout_width="75dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginBottom="12dp"
+                    android:text="Schedule Appliance"/>
+
+                <ImageButton
+                    android:id="@+id/imageButton_schedule_appliance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/card_background"
+                    android:tint="@color/letters_dark"
+                    android:src="@drawable/vector_scheduler_64"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

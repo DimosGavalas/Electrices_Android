@@ -21,7 +21,7 @@ import com.example.electrices.R;
 import com.example.electrices.model.StatisticsDocument;
 import com.example.electrices.utilities.CustomDateUtility;
 import com.example.electrices.utilities.FireStoreConnection;
-import com.example.electrices.utilities.recyclerViewComponents.TimeframesAdapter;
+import com.example.electrices.model.recyclerViewComponents.TimeframesAdapter;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
@@ -53,9 +53,11 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView rvTimeframes;
     private TimeframesAdapter timeframesAdapter;
 
-    private ArrayList<Map<String, Object>> statsDocumentTimeframesList;
-    private HashMap<String, Float> statsDocumentPriceLevelDestributionList;
-    private ArrayList<Map<String, Object>> adapterTimeframesList;
+//    private ArrayList<Map<String, Object>> statsDocumentTimeframesList;
+    private ArrayList<StatisticsDocument.Timeframe> statsDocumentTimeframesList;
+    private HashMap<String, Float> statsDocumentPriceLevelDestributionMap;
+//    private ArrayList<Map<String, Object>> adapterTimeframesList;
+    private ArrayList<StatisticsDocument.Timeframe> adapterTimeframesList;
     private CountDownTimer popupDismissTimer;
     private CustomDateUtility customDateUtility;
 
@@ -98,35 +100,25 @@ public class HomeActivity extends AppCompatActivity {
 
         fireStoreConnection = new FireStoreConnection();
         fireStoreConnection.getStatisticsDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
-//        fireStoreConnection.getStatisticsDocumentForDate("2021-05-07");
         // When the above method gets the document the below listener will fire up.
         fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener(){
             @Override
             public <D> void onDocumentReady(D document) {
                 // here check if document is of type statistics document.
-                // In barchart activity check id the returnign document id of simple prices document.
+                // In barchart activity check id the returning document id of simple prices document.
                 if(document instanceof StatisticsDocument){
                     statisticsDocument = (StatisticsDocument) document;
                     statsDocumentTimeframesList = statisticsDocument.getTimeframes();
-                    statsDocumentPriceLevelDestributionList = statisticsDocument.getPrices_percent_distribution();
+                    statsDocumentPriceLevelDestributionMap = statisticsDocument.getPrices_percent_distribution();
 
-                    HashMap<String, Float> pieChartData = statsDocumentPriceLevelDestributionList;
+                    HashMap<String, Float> pieChartData = statsDocumentPriceLevelDestributionMap;
                     adapterTimeframesList = new ArrayList<>();
+                    Log.i(TAG, String.valueOf(statsDocumentTimeframesList));
                     adapterTimeframesList.addAll(statsDocumentTimeframesList);
 
                     setPiechartData(pieChart, pieChartData);
                     timeframesAdapter = new TimeframesAdapter(adapterTimeframesList);
                     rvTimeframes.setAdapter(timeframesAdapter);
-
-
-//                    Log.i(TAG, "is StatisticsDocument");
-//                    Log.i(TAG, "Date => " + statisticsDocument.getDate());
-//                    Log.i(TAG, "Day => " + statisticsDocument.getDay());
-//                    Log.i(TAG, "Distribution => " + statisticsDocument.getPrices_percent_distribution());
-//                    Log.i(TAG, "Timeframes => " + statisticsDocument.getTimeframes());
-//                    for(Map map : statisticsDocument.getTimeframes()){
-//                        Log.i(TAG, (String) map.get("timeframe"));
-//                    }
                 }
             }
         });
@@ -271,31 +263,31 @@ public class HomeActivity extends AppCompatActivity {
             Log.i(TAG, "Statistics Doc NOT NULL ");
 //            ArrayList<HashMap<String, Object>> allPriceLevelTimeframes = statisticsDocument.getTimeframes();
 //            Log.i(TAG, "ALL Pr. LVL Timeframes => " + String.valueOf(allPriceLevelTimeframes));
-            ArrayList<Map<String, Object>> priceLevelTimeframes = new ArrayList<>();
+            ArrayList<StatisticsDocument.Timeframe> priceLevelTimeframes = new ArrayList<>();
 
             if(priceLevel.equals(PRICE_LEVEL_ALL)){
                 priceLevelTimeframes.addAll(statsDocumentTimeframesList);
             }
 
             if(priceLevel.equals(PRICE_LEVEL_LOW)){
-                for(Map<String, Object> timeframe : statsDocumentTimeframesList){
-                    if(timeframe.get("price_level").equals("low")) {
+                for(StatisticsDocument.Timeframe timeframe : statsDocumentTimeframesList){
+                    if(timeframe.getPrice_level().equals("low")) {
                         priceLevelTimeframes.add(timeframe);
                     }
                 }
             }
 
             if(priceLevel.equals(PRICE_LEVEL_MEDIUM)){
-                for(Map<String, Object> timeframe : statsDocumentTimeframesList){
-                    if(timeframe.get("price_level").equals("medium")) {
+                for(StatisticsDocument.Timeframe timeframe : statsDocumentTimeframesList){
+                    if(timeframe.getPrice_level().equals("medium")) {
                         priceLevelTimeframes.add(timeframe);
                     }
                 }
             }
 
             if(priceLevel.equals(PRICE_LEVEL_HIGH)){
-                for(Map<String, Object> timeframe : statsDocumentTimeframesList){
-                    if(timeframe.get("price_level").equals("high")) {
+                for(StatisticsDocument.Timeframe timeframe : statsDocumentTimeframesList){
+                    if(timeframe.getPrice_level().equals("high")) {
                         priceLevelTimeframes.add(timeframe);
                     }
                 }

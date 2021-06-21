@@ -13,6 +13,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.HashMap;
+
 
 public class FireStoreConnection {
 
@@ -38,16 +40,28 @@ public class FireStoreConnection {
     }
     private DocumentListener documentListener;
 
+    // Following a Singleton pattern
+//    private static FireStoreConnection INSTANCE = null;
+
     private static final String TAG = "FIRESTORE-CONNECTION";
-    private static final String COLLECTION = "electricityPrices";
+    private static final String PRICES_COLLECTION = "electricityPrices";
     private static final String STATISTICS_COLLECTION = "electricityPrices-stats";
 
     private FirebaseFirestore ffDatabase;
 
+    // Private constructor for singleton pattern
     public FireStoreConnection(){
         documentListener = null;
         openDBConnection();
     }
+
+    // Singleton pattern
+//    public static FireStoreConnection getInstance(){
+//        if(INSTANCE == null){
+//            INSTANCE = new FireStoreConnection();
+//        }
+//        return INSTANCE;
+//    }
 
     private void openDBConnection(){
         // Access a Cloud Firestore instance from your Activity
@@ -79,8 +93,8 @@ public class FireStoreConnection {
                 });
     }
 
-    public void getDocumentForDate(String date){
-        Query querySelectedDatePrices = ffDatabase.collection(COLLECTION).whereEqualTo("date", date);
+    public void getPricesDocumentForDate(String date){
+        Query querySelectedDatePrices = ffDatabase.collection(PRICES_COLLECTION).whereEqualTo("date", date);
         querySelectedDatePrices
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -96,15 +110,15 @@ public class FireStoreConnection {
 //                                Log.i(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w(TAG, "Error getting PRICES documents.", task.getException());
                         }
                     }
                 });
     }
 
     public void getStatisticsDocumentForDate(String date){
-        Query querySelectedDatePrices = ffDatabase.collection(STATISTICS_COLLECTION).whereEqualTo("date", date);
-        querySelectedDatePrices
+        Query querySelectedDateStats = ffDatabase.collection(STATISTICS_COLLECTION).whereEqualTo("date", date);
+        querySelectedDateStats
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     StatisticsDocument statisticsDocument = new StatisticsDocument();
@@ -113,13 +127,58 @@ public class FireStoreConnection {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 statisticsDocument = document.toObject(StatisticsDocument.class); // Can return this object and pass it to another class.
+
                                 if (documentListener != null){
                                     documentListener.onDocumentReady(statisticsDocument);
                                 }
 //                                Log.i(TAG, document.getId() + " => " + document.getData());
                             }
                         } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            Log.w(TAG, "Error getting STATISTICS documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    // Creates a compound prices document where it relates every hourly price with a price level (low, medium, high).
+    public void getCompoundPricesDocumentForDate(String date){
+        final PricesDocument[] compoundPricesDocument = {new PricesDocument()};
+        Query querySelectedDatePrices = ffDatabase.collection(PRICES_COLLECTION).whereEqualTo("date", date);
+        querySelectedDatePrices
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                compoundPricesDocument[0] = document.toObject(PricesDocument.class); // Can return this object and pass it to another class.
+
+                                // New nested query for the creation of a compound PricesDocument that contains also data from the statistics collection.
+                                Query querySelectedDateStatsMinMax = ffDatabase.collection(STATISTICS_COLLECTION).whereEqualTo("date", date);
+                                querySelectedDateStatsMinMax
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        // Can return this object and pass it to another class.
+                                                        HashMap<String, HashMap<String, Double>> price_levels_min_max = (HashMap<String, HashMap<String, Double>>) document.getData().get("price_levels_min_max");
+                                                        compoundPricesDocument[0].constructPriceLevelHourObjects(price_levels_min_max);
+
+                                                        if (documentListener != null){
+                                                            documentListener.onDocumentReady(compoundPricesDocument[0]);
+                                                        }
+//                                                        Log.i(TAG, document.getId() + " => " + price_levels_min_max);
+                                                    }
+                                                } else {
+                                                    Log.w(TAG, "Error getting STATISTICS documents.", task.getException());
+                                                }
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting PRICES documents.", task.getException());
                         }
                     }
                 });

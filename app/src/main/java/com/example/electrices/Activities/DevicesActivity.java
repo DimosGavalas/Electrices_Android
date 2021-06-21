@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.R;
-import com.example.electrices.model.DeviceControl;
-import com.example.electrices.model.DevicesControlAdapter;
+import com.example.electrices.model.Appliance;
+import com.example.electrices.model.recyclerViewComponents.AppliancesAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 public class DevicesActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    List<DeviceControl> devicesList;
+    List<Appliance> devicesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,8 @@ public class DevicesActivity extends AppCompatActivity {
      }
 
     private void setRecyclerView() {
-        DevicesControlAdapter devicesControlAdapter = new DevicesControlAdapter(devicesList);
-        recyclerView.setAdapter(devicesControlAdapter);
+        AppliancesAdapter appliancesAdapter = new AppliancesAdapter(devicesList);
+        recyclerView.setAdapter(appliancesAdapter);
         recyclerView.setHasFixedSize(true);
     }
 
@@ -43,9 +43,9 @@ public class DevicesActivity extends AppCompatActivity {
 
         devicesList = new ArrayList<>();
 
-        devicesList.add(new DeviceControl("Coffee Machine", "START", "STOP", "Warm water", "Cold water"));
-        devicesList.add(new DeviceControl("Washing Machine", "ON", "OFF", "Schedule washing", "Cancel schedule"));
-        devicesList.add(new DeviceControl("Robot Vacuum cleaner", "START", "STOP", "Schedule cleaning", "Cancel schedule"));
+        devicesList.add(new Appliance("Coffee Machine", "START", "STOP", "Warm water", "Cold water", R.drawable.appliance_image_coffee_machine_254));
+        devicesList.add(new Appliance("Washing Machine", "ON", "OFF", "Schedule washing", "Cancel schedule", R.drawable.appliance_image_washing_machine_254));
+        devicesList.add(new Appliance("Robot Vacuum cleaner", "START", "STOP", "Schedule cleaning", "Cancel schedule", R.drawable.appliance_image_general_appliances_254));
     }
 
 }

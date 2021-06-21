@@ -24,12 +24,9 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Locale;
 
 public class BarChartActivity extends AppCompatActivity {
 
@@ -66,7 +63,7 @@ public class BarChartActivity extends AppCompatActivity {
 //        Log.i(TAG, "onCreate => " + getTodaysDateForFirestoreQuery());
 
         fireStoreConnection = new FireStoreConnection();
-        fireStoreConnection.getDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
+        fireStoreConnection.getPricesDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
 //        fireStoreConnection.getDocumentForDate(getTodaysDateForFirestoreQuery());
 
         // When the above method finishes the below listener will fire up.
@@ -93,13 +90,14 @@ public class BarChartActivity extends AppCompatActivity {
     private ArrayList<BarEntry> barEntriesSetup(){
         ArrayList<BarEntry> barEntries = new ArrayList<>();
 
-        HashMap<String,Float> pricesPerHour = pricesDocument.getPricesPerHour();
+        HashMap<String,Double> pricesPerHour =  pricesDocument.getPricesPerHour();
 //        Log.i(TAG, String.valueOf(pricesDocument.getDate()));
 //        Log.i(TAG, String.valueOf(pricesDocument.getDay()));
 //        Log.i(TAG, String.valueOf(pricesPerHour));
         int noOfBarEntry = 0;
         for (String timeOfDay : timeOfDayLabels){
-            barEntries.add(new BarEntry(noOfBarEntry, pricesPerHour.get(timeOfDay)));
+            double priceValue = pricesPerHour.get(timeOfDay);
+            barEntries.add(new BarEntry(noOfBarEntry, (float) priceValue));
             noOfBarEntry += 1;
         }
 //        Log.i(TAG, String.valueOf(noOfBarEntry));
@@ -176,7 +174,7 @@ public class BarChartActivity extends AppCompatActivity {
                 Log.i(TAG, "onDataSet => " + firestoreDateQuery);
                 barEntries_prices.clear();
                 barChart.clear();
-                fireStoreConnection.getDocumentForDate(firestoreDateQuery);
+                fireStoreConnection.getPricesDocumentForDate(firestoreDateQuery);
             }
         };
 

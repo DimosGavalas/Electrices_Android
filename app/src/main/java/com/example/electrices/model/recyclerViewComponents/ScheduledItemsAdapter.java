@@ -1,4 +1,4 @@
-package com.example.electrices.utilities.recyclerViewComponents;
+package com.example.electrices.model.recyclerViewComponents;
 
 import android.content.Context;
 import android.content.res.Resources;

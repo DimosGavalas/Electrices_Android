@@ -9,4 +9,7 @@
     <string name="medium_prices_label">MED.</string>
     <string name="high_prices_label">HIGH</string>
 
+    <string name="radio_button_circle">M32,8 A24,24 0 1 1 31.99,8 z</string>
+    <string name="radio_button_tick">M26,36 L36,36 L38,4</string>
+
 </resources>

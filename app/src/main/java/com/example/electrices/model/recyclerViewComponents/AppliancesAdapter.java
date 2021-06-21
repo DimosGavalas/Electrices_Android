@@ -62,6 +62,7 @@ public class AppliancesAdapter extends RecyclerView.Adapter<AppliancesAdapter.Vi
                 public void onClick(View v) {
                     RequestQueue requestQueue = Volley.newRequestQueue(applicationContext);
                     String urlStartCoffee = "http://83.95.169.116/startappliance";
+//                    String urlStartCoffee = "http://83.95.169.116:5000/api/startMachine";
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, urlStartCoffee, null, new Response.Listener<JSONObject>() {
 
@@ -96,7 +97,7 @@ public class AppliancesAdapter extends RecyclerView.Adapter<AppliancesAdapter.Vi
             card_toggler.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Appliance appliance = applianceListList.get(getAbsoluteAdapterPosition());
+                    Appliance appliance = applianceList.get(getAbsoluteAdapterPosition());
                     appliance.setExpandable(!appliance.isExpandable());
                     notifyItemChanged(getAbsoluteAdapterPosition());
                 }
@@ -107,7 +108,7 @@ public class AppliancesAdapter extends RecyclerView.Adapter<AppliancesAdapter.Vi
             button_schedule_appliance.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Appliance appliance = applianceListList.get(getAbsoluteAdapterPosition());
+                    Appliance appliance = applianceList.get(getAbsoluteAdapterPosition());
                     PopupWindowApplianceScheduler popupWindowApplianceScheduler = new PopupWindowApplianceScheduler(v);
                     popupWindowApplianceScheduler.setAppliance(appliance);
                     popupWindowApplianceScheduler.showPopupWindow();
@@ -120,10 +121,10 @@ public class AppliancesAdapter extends RecyclerView.Adapter<AppliancesAdapter.Vi
 
 
     private final String TAG = "DevicesControlAdapter";
-    List<Appliance> applianceListList;
+    List<Appliance> applianceList;
 
-    public AppliancesAdapter(List<Appliance> applianceListList) {
-        this.applianceListList = applianceListList;
+    public AppliancesAdapter(List<Appliance> applianceList) {
+        this.applianceList = applianceList;
     }
 
     @NonNull
@@ -136,21 +137,21 @@ public class AppliancesAdapter extends RecyclerView.Adapter<AppliancesAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Appliance devices = applianceListList.get(position);
-        holder.appliance_image.setImageResource(devices.getAppliance_image());
-        holder.appliance_name.setText(devices.getAppliance_name());
-        holder.txtView_mode_start.setText(devices.getStart());
-        holder.txtView_mode_stop.setText(devices.getStop());
-        holder.txtView_mode_3.setText(devices.getWarmWater());
-        holder.txtView_mode_4.setText(devices.getColdWater());
+        Appliance appliance = applianceList.get(position);
+        holder.appliance_image.setImageResource(appliance.getAppliance_image());
+        holder.appliance_name.setText(appliance.getAppliance_name());
+        holder.txtView_mode_start.setText(appliance.getStart());
+        holder.txtView_mode_stop.setText(appliance.getStop());
+        holder.txtView_mode_3.setText(appliance.getWarmWater());
+        holder.txtView_mode_4.setText(appliance.getColdWater());
 
-        boolean isExpandable = applianceListList.get(position).isExpandable();
+        boolean isExpandable = applianceList.get(position).isExpandable();
         holder.expandableLayout.setVisibility(isExpandable ? View.VISIBLE : View.GONE);
         holder.card_toggler.setRotation(isExpandable ? 180f : 0f);
     }
 
     @Override
     public int getItemCount() {
-        return applianceListList.size();
+        return applianceList.size();
     }
 }

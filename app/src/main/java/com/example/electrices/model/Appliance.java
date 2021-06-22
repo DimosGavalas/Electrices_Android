@@ -42,19 +42,19 @@ public class Appliance {
             ApplianceMode applianceMode = new ApplianceMode();
             switch (i){
                 case 1:
-                    applianceMode.setmModeName("Mode "+String.valueOf(i));
+                    applianceMode.setmMode(i);
                     applianceMode.setmWorkingCycle("2h 15m");
                     break;
                 case 2:
-                    applianceMode.setmModeName("Mode "+String.valueOf(i));
+                    applianceMode.setmMode(i);
                     applianceMode.setmWorkingCycle("3h");
                     break;
                 case 3:
-                    applianceMode.setmModeName("Mode "+String.valueOf(i));
+                    applianceMode.setmMode(i);
                     applianceMode.setmWorkingCycle("1h 40m");
                     break;
                 case 4:
-                    applianceMode.setmModeName("Mode "+String.valueOf(i));
+                    applianceMode.setmMode(i);
                     applianceMode.setmWorkingCycle("1h 5m");
 
                     break;

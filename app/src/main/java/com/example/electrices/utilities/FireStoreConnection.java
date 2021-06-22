@@ -1,17 +1,21 @@
 package com.example.electrices.utilities;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.electrices.model.PricesDocument;
+import com.example.electrices.model.ScheduleDocument;
 import com.example.electrices.model.StatisticsDocument;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 
@@ -40,12 +44,18 @@ public class FireStoreConnection {
     }
     private DocumentListener documentListener;
 
+    public interface DocumentUploadListener{
+        void onDocumentUploaded(boolean isUploaded);
+    }
+    private DocumentUploadListener documentUploadListener;
+
     // Following a Singleton pattern
 //    private static FireStoreConnection INSTANCE = null;
 
     private static final String TAG = "FIRESTORE-CONNECTION";
     private static final String PRICES_COLLECTION = "electricityPrices";
     private static final String STATISTICS_COLLECTION = "electricityPrices-stats";
+    private static final String APPLIANCE_SCHEDULE = "applianceSchedule";
 
     private FirebaseFirestore ffDatabase;
 
@@ -93,6 +103,7 @@ public class FireStoreConnection {
                 });
     }
 
+    // ############## Reading Methods #####################
     public void getPricesDocumentForDate(String date){
         Query querySelectedDatePrices = ffDatabase.collection(PRICES_COLLECTION).whereEqualTo("date", date);
         querySelectedDatePrices
@@ -184,9 +195,27 @@ public class FireStoreConnection {
                 });
     }
 
+
+    // ############## Input Methods #####################
+    public void insertApplianceScheduleDocument(ScheduleDocument scheduleDocument, String dateId){
+        ffDatabase.collection(APPLIANCE_SCHEDULE).document(dateId).set(scheduleDocument, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    if(documentUploadListener != null){
+                        documentUploadListener.onDocumentUploaded(true);
+                    }
+                }
+            }
+        });
+    }
+
     public void setDocumentListener(DocumentListener documentListener) {
         this.documentListener = documentListener;
     }
 
+    public void setDocumentUploadListener(DocumentUploadListener documentUploadListener){
+        this.documentUploadListener = documentUploadListener;
+    }
 
 }

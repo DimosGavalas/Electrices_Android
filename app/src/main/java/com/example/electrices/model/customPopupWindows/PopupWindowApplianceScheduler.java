@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.electrices.model.Appliance;
 import com.example.electrices.model.ApplianceMode;
 import com.example.electrices.model.PricesDocument;
+import com.example.electrices.model.ScheduleDocument;
 import com.example.electrices.model.recyclerViewComponents.ApplianceModeSelectionAdapter;
 import com.example.electrices.model.recyclerViewComponents.ApplianceTimeSelectionAdapter;
 import com.example.electrices.utilities.CustomDateUtility;
@@ -31,6 +33,7 @@ import com.example.electrices.utilities.FireStoreConnection;
 import com.example.electrices.utilities.ObservableVariable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import static com.example.electrices.R.*;
 
@@ -248,6 +251,17 @@ public class PopupWindowApplianceScheduler {
             @Override
             public void onClick(View v) {
                 // Here make the call to firestore to save the scheduled device.
+                ScheduleDocument scheduleDocument = new ScheduleDocument(mTimeSelectionObject.getTime(), appliance.getAppliance_name(), mModeSelectionObject.getmModeNumber());
+                fireStoreConnection.setDocumentUploadListener(new FireStoreConnection.DocumentUploadListener() {
+                    @Override
+                    public void onDocumentUploaded(boolean isUploaded) {
+                        if(isUploaded){
+                            popupWindow.dismiss();
+                            Toast.makeText(popupViewContext, "Schedule Uploaded", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                fireStoreConnection.insertApplianceScheduleDocument(scheduleDocument, customDateUtility.getTodaysDateForFirestoreQuery());
             }
         });
     }
@@ -311,6 +325,7 @@ public class PopupWindowApplianceScheduler {
         });
     }
 
+    // For testing observable variables
     private void onVariablesChagnedListener(){
 //        obv = new ObservableVariable<Boolean>();
 //        obv.setOnChangeListener(new ObservableVariable.OnChangeListener() {

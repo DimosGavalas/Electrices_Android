@@ -3,6 +3,7 @@ package com.example.electrices.model;
 public class ApplianceMode {
 
     private String mModeName;
+    private Integer mModeNumber;
     private String mWorkingCycle;
     private boolean checked = false;
     private boolean expandable = false;
@@ -15,8 +16,14 @@ public class ApplianceMode {
         return mModeName;
     }
 
-    public void setmModeName(String mModeName) {
-        this.mModeName = mModeName;
+
+    public Integer getmModeNumber(){
+        return mModeNumber;
+    }
+
+    public void setmMode(Integer modeNumber){
+        this.mModeNumber = modeNumber;
+        this.mModeName = "Mode " + String.valueOf(modeNumber);
     }
 
     public String getmWorkingCycle() {

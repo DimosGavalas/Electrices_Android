@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.R;
+import com.example.electrices.model.ApplianceSchedule;
 import com.example.electrices.model.firestoreModel.ScheduleDocument;
 
 import java.util.ArrayList;
@@ -48,11 +49,11 @@ public class ScheduledAppliancesAdapter extends RecyclerView.Adapter<ScheduledAp
 
 
     // Store a member variable for the timeframes.
-    private ArrayList<ScheduleDocument> mScheduledAppliancesList;
+    private ArrayList<ApplianceSchedule> mScheduledAppliancesList;
     private Resources resources;
 
     // Pass in the timeframes array into the constructor.
-    public ScheduledAppliancesAdapter(ArrayList<ScheduleDocument> scheduledAppliances) {
+    public ScheduledAppliancesAdapter(ArrayList<ApplianceSchedule> scheduledAppliances) {
         this.mScheduledAppliancesList = scheduledAppliances;
     }
 
@@ -66,7 +67,7 @@ public class ScheduledAppliancesAdapter extends RecyclerView.Adapter<ScheduledAp
         resources = context.getResources();
 
         // Inflate the custom layout
-        View scheduledItemView = inflater.inflate(R.layout.recycler_view_timeframe_item, parent, false);
+        View scheduledItemView = inflater.inflate(R.layout.recycler_view_scheduled_item, parent, false);
 
         // Return a new holder instance
         return new ViewHolder(scheduledItemView);
@@ -76,10 +77,12 @@ public class ScheduledAppliancesAdapter extends RecyclerView.Adapter<ScheduledAp
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         // Get the data model based on position.
-        ScheduleDocument scheduleDocument = mScheduledAppliancesList.get(position);
-        Log.i(TAG, String.valueOf(scheduleDocument));
+        ApplianceSchedule applianceSchedule = mScheduledAppliancesList.get(position);
 
-//        viewHolder.applianceNameTV
+        viewHolder.applianceNameTV.setText(applianceSchedule.getApplianceName());
+        viewHolder.startTimeTV.setText(applianceSchedule.getTimeScheduled());
+        viewHolder.modeTV.setText(String.valueOf(applianceSchedule.getMode()));
+        viewHolder.workCycleTV.setText("2h 15m");
     }
 
     // Returns the total count of items in the list

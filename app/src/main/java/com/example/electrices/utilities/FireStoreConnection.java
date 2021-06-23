@@ -3,6 +3,7 @@ package com.example.electrices.utilities;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.electrices.model.firestoreModel.PricesDocument;
 import com.example.electrices.model.firestoreModel.ScheduleDocument;
@@ -10,7 +11,9 @@ import com.example.electrices.model.firestoreModel.StatisticsDocument;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -195,22 +198,44 @@ public class FireStoreConnection {
     }
 
     public void getAppliancesScheduleDocumentForDate(String date){
+//        ffDatabase.collection(APPLIANCE_SCHEDULE).document(date)
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+//                        ScheduleDocument scheduleDocument = new ScheduleDocument();
+//                        if(task.isSuccessful()){
+//                            DocumentSnapshot document = task.getResult();
+//                            scheduleDocument = document.toObject(ScheduleDocument.class);
+//
+//                            if (documentListener != null) {
+//                                documentListener.onDocumentReady(scheduleDocument);
+//                            }
+//
+//                        } else {
+//                            Log.w(TAG, "Error getting Schedule document.", task.getException());
+//                        }
+//                    }
+//                });
+        // Use of Snapshot listener for real time data listening.
         ffDatabase.collection(APPLIANCE_SCHEDULE).document(date)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        ScheduleDocument scheduleDocument = new ScheduleDocument();
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot document: task.getResult()){
-                                scheduleDocument = document.toObject(ScheduleDocument.class);
+                    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.w(TAG, "Listen failed.", error);
+                            return;
+                        }
 
-                                if (documentListener != null){
-                                    documentListener.onDocumentReady(scheduleDocument);
-                                }
+                        ScheduleDocument scheduleDocument;
+                        if (snapshot != null && snapshot.exists()) {
+                            scheduleDocument = snapshot.toObject(ScheduleDocument.class);
+                            if (documentListener != null) {
+                                documentListener.onDocumentReady(scheduleDocument);
                             }
+                            Log.i(TAG, "Current data: " + String.valueOf(snapshot.toObject(ScheduleDocument.class)));
                         } else {
-                            Log.w(TAG, "Error getting Schedule document.", task.getException());
+                            Log.d(TAG, "Current data: null");
                         }
                     }
                 });

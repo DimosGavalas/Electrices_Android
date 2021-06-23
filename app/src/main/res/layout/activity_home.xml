@@ -376,7 +376,8 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:weightSum="4"
-                        android:paddingVertical="3dp">
+                        android:paddingVertical="3dp"
+                        android:background="@drawable/bg_cards">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -417,7 +418,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_scheduled_appliances"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_cards"/>
             </LinearLayout>
         </LinearLayout>
 

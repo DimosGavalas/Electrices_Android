@@ -18,8 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.R;
+import com.example.electrices.model.ApplianceSchedule;
+import com.example.electrices.model.firestoreModel.FirestoreDocument;
 import com.example.electrices.model.firestoreModel.ScheduleDocument;
 import com.example.electrices.model.firestoreModel.StatisticsDocument;
+import com.example.electrices.model.recyclerViewComponents.ScheduledAppliancesAdapter;
 import com.example.electrices.utilities.CustomDateUtility;
 import com.example.electrices.utilities.FireStoreConnection;
 import com.example.electrices.model.recyclerViewComponents.TimeframesAdapter;
@@ -127,13 +130,40 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        fireStoreConnection.getAppliancesScheduleDocumentForDate("2021-06-22");
-        fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener() {
+
+       /*
+       @TODO
+       Database structure needs to be fixed first because creates a chaos in the code implementation.
+       */
+        FireStoreConnection fireStoreConnection1 = new FireStoreConnection();
+//        fireStoreConnection1.getAppliancesScheduleDocumentForDate("2021-06-22");
+        fireStoreConnection1.getAppliancesScheduleDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
+        fireStoreConnection1.setDocumentListener(new FireStoreConnection.DocumentListener() {
             @Override
             public <D> void onDocumentReady(D document) {
                 if(document instanceof ScheduleDocument){
                     ScheduleDocument scheduleDocument = (ScheduleDocument) document;
-                    Log.i(TAG, String.valueOf(scheduleDocument));
+                    Log.i(TAG, String.valueOf(scheduleDocument.getDaySchedule()));
+
+                    ArrayList<ApplianceSchedule> applianceScheduleList = new ArrayList<>();
+
+                    // Iterating through the schedule hashmap
+                    for(Map.Entry mapItemTime : scheduleDocument.getDaySchedule().entrySet()){
+                        String scheduledTime = (String) mapItemTime.getKey();
+                        HashMap<String, HashMap<String, Integer>> scheduledAppliances = (HashMap<String, HashMap<String, Integer>>) mapItemTime.getValue();
+                        for(Map.Entry mapItemAppliance : scheduledAppliances.entrySet()){
+                            String applianceName = (String) mapItemAppliance.getKey();
+                            HashMap<String, Integer> mode = (HashMap<String, Integer>) mapItemAppliance.getValue();
+
+                            ApplianceSchedule applianceSchedule = new ApplianceSchedule(applianceName, scheduledTime, mode.get("Mode"));
+                            applianceScheduleList.add(applianceSchedule);
+//                            Log.i(TAG, applianceSchedule.getTimeScheduled() + " " + applianceSchedule.getApplianceName() + " " + applianceSchedule.getMode());
+                        }
+                    }
+
+                    ScheduledAppliancesAdapter scheduledAppliancesAdapter = new ScheduledAppliancesAdapter(applianceScheduleList);
+                    rvScheduledAppliances.setAdapter(scheduledAppliancesAdapter);
+
                 }
             }
         });

@@ -1,4 +1,4 @@
-package com.example.electrices.model;
+package com.example.electrices.model.firestoreModel;
 
 
 public abstract class FirestoreDocument {

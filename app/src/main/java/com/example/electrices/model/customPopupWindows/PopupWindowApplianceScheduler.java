@@ -2,7 +2,6 @@ package com.example.electrices.model.customPopupWindows;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
@@ -10,7 +9,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,8 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.model.Appliance;
 import com.example.electrices.model.ApplianceMode;
-import com.example.electrices.model.PricesDocument;
-import com.example.electrices.model.ScheduleDocument;
+import com.example.electrices.model.firestoreModel.PricesDocument;
+import com.example.electrices.model.firestoreModel.ScheduleDocument;
 import com.example.electrices.model.recyclerViewComponents.ApplianceModeSelectionAdapter;
 import com.example.electrices.model.recyclerViewComponents.ApplianceTimeSelectionAdapter;
 import com.example.electrices.utilities.CustomDateUtility;
@@ -33,7 +31,6 @@ import com.example.electrices.utilities.FireStoreConnection;
 import com.example.electrices.utilities.ObservableVariable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static com.example.electrices.R.*;
 
@@ -412,6 +409,8 @@ public class PopupWindowApplianceScheduler {
             }
         });
     }
+
+
 
     // Checking if Mode and Time has been selected.
     private boolean areSchedulingItemsSelected(){

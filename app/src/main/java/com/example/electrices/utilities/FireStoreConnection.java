@@ -1,16 +1,15 @@
 package com.example.electrices.utilities;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.electrices.model.PricesDocument;
-import com.example.electrices.model.ScheduleDocument;
-import com.example.electrices.model.StatisticsDocument;
+import com.example.electrices.model.firestoreModel.PricesDocument;
+import com.example.electrices.model.firestoreModel.ScheduleDocument;
+import com.example.electrices.model.firestoreModel.StatisticsDocument;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -190,6 +189,28 @@ public class FireStoreConnection {
                             }
                         } else {
                             Log.w(TAG, "Error getting PRICES documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void getAppliancesScheduleDocumentForDate(String date){
+        ffDatabase.collection(APPLIANCE_SCHEDULE).document(date)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        ScheduleDocument scheduleDocument = new ScheduleDocument();
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot document: task.getResult()){
+                                scheduleDocument = document.toObject(ScheduleDocument.class);
+
+                                if (documentListener != null){
+                                    documentListener.onDocumentReady(scheduleDocument);
+                                }
+                            }
+                        } else {
+                            Log.w(TAG, "Error getting Schedule document.", task.getException());
                         }
                     }
                 });

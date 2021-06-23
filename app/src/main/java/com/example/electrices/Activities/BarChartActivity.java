@@ -12,7 +12,7 @@ import android.widget.DatePicker;
 
 import com.example.electrices.MPchartsCustom.CustomMarkerView;
 import com.example.electrices.R;
-import com.example.electrices.model.PricesDocument;
+import com.example.electrices.model.firestoreModel.PricesDocument;
 import com.example.electrices.utilities.CustomDateUtility;
 import com.example.electrices.utilities.DatePickerStyler;
 import com.example.electrices.utilities.FireStoreConnection;

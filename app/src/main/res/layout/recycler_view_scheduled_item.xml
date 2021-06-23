@@ -1,55 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingVertical="6dp"
-    android:paddingHorizontal="8dp">
-
-    <TextView
-        android:id="@+id/appliance_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Appliance Name"
-        android:textSize="12sp"
-        android:textStyle="bold"/>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/appliance_name"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="6dp"
-        android:paddingHorizontal="6dp"
-        android:weightSum="3">
+        android:weightSum="4"
+        android:paddingVertical="3dp">
 
         <TextView
+            android:id="@+id/appliance_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Appliance Name"
             android:layout_weight="1"
-            android:text="Mode 1"
-            android:textSize="12sp"/>
+            android:layout_gravity="center"
+            android:gravity="center"/>
 
         <TextView
+            android:id="@+id/start_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Start Time"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="12:00 - 14:00"
-            android:textSize="12sp"/>
+            android:layout_gravity="center"
+            android:gravity="center"/>
 
         <TextView
+            android:id="@+id/work_cycle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Work Cycle"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="30 Ore/KWh (Avg.)"
-            android:textSize="12sp"/>
+            android:layout_gravity="center"
+            android:gravity="center"/>
 
+        <TextView
+            android:id="@+id/mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mode"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"/>
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

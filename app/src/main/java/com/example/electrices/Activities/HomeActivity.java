@@ -18,7 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.R;
-import com.example.electrices.model.StatisticsDocument;
+import com.example.electrices.model.firestoreModel.ScheduleDocument;
+import com.example.electrices.model.firestoreModel.StatisticsDocument;
 import com.example.electrices.utilities.CustomDateUtility;
 import com.example.electrices.utilities.FireStoreConnection;
 import com.example.electrices.model.recyclerViewComponents.TimeframesAdapter;
@@ -50,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView pieChartLabelPercentLow;
     private TextView pieChartLabelPercentMedium;
     private TextView pieChartLabelPercentHigh;
-    private RecyclerView rvTimeframes;
+    private RecyclerView rvTimeframes, rvScheduledAppliances;
     private TimeframesAdapter timeframesAdapter;
 
 //    private ArrayList<Map<String, Object>> statsDocumentTimeframesList;
@@ -97,6 +98,9 @@ public class HomeActivity extends AppCompatActivity {
         rvTimeframes = findViewById(R.id.recycler_view_statistics_home_activity);
         rvTimeframes.setLayoutManager(new LinearLayoutManager(this));
 
+        rvScheduledAppliances = findViewById(R.id.recycler_view_scheduled_appliances);
+        rvScheduledAppliances.setLayoutManager(new LinearLayoutManager(this));
+
 
         fireStoreConnection = new FireStoreConnection();
         fireStoreConnection.getStatisticsDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
@@ -113,7 +117,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     HashMap<String, Float> pieChartData = statsDocumentPriceLevelDestributionMap;
                     adapterTimeframesList = new ArrayList<>();
-                    Log.i(TAG, String.valueOf(statsDocumentTimeframesList));
+//                    Log.i(TAG, String.valueOf(statsDocumentTimeframesList));
                     adapterTimeframesList.addAll(statsDocumentTimeframesList);
 
                     setPiechartData(pieChart, pieChartData);
@@ -122,7 +126,19 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        fireStoreConnection.getAppliancesScheduleDocumentForDate("2021-06-22");
+        fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener() {
+            @Override
+            public <D> void onDocumentReady(D document) {
+                if(document instanceof ScheduleDocument){
+                    ScheduleDocument scheduleDocument = (ScheduleDocument) document;
+                    Log.i(TAG, String.valueOf(scheduleDocument));
+                }
+            }
+        });
     }
+
 
     // Main method for the construction of the pie chart.
     private void pieChartSetup(PieChart pieChart){
@@ -260,7 +276,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setPriceLevelTimeframesToRecyclerView(String priceLevel){
         if(statisticsDocument != null){
-            Log.i(TAG, "Statistics Doc NOT NULL ");
+//            Log.i(TAG, "Statistics Doc NOT NULL ");
 //            ArrayList<HashMap<String, Object>> allPriceLevelTimeframes = statisticsDocument.getTimeframes();
 //            Log.i(TAG, "ALL Pr. LVL Timeframes => " + String.valueOf(allPriceLevelTimeframes));
             ArrayList<StatisticsDocument.Timeframe> priceLevelTimeframes = new ArrayList<>();
@@ -297,10 +313,10 @@ public class HomeActivity extends AppCompatActivity {
             adapterTimeframesList.clear();
             adapterTimeframesList.addAll(priceLevelTimeframes);
             timeframesAdapter.notifyDataSetChanged();
-            Log.i(TAG, "Adapter Timeframes => " + String.valueOf(adapterTimeframesList));
-            Log.i(TAG, "Pr. LVL Timeframes => " + String.valueOf(priceLevelTimeframes));
-            Log.i(TAG, "ALL Pr. LVL Timeframes => " + String.valueOf(statsDocumentTimeframesList));
-            Log.i(TAG, "ALL Pr. LVL Timeframes => " + String.valueOf(statisticsDocument.getTimeframes()) + "\n");
+//            Log.i(TAG, "Adapter Timeframes => " + String.valueOf(adapterTimeframesList));
+//            Log.i(TAG, "Pr. LVL Timeframes => " + String.valueOf(priceLevelTimeframes));
+//            Log.i(TAG, "ALL Pr. LVL Timeframes => " + String.valueOf(statsDocumentTimeframesList));
+//            Log.i(TAG, "ALL Pr. LVL Timeframes => " + String.valueOf(statisticsDocument.getTimeframes()) + "\n");
         }
     }
 

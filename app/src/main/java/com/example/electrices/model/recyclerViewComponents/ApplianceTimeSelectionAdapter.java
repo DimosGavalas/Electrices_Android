@@ -2,7 +2,6 @@ package com.example.electrices.model.recyclerViewComponents;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.R;
-import com.example.electrices.model.PricesDocument;
+import com.example.electrices.model.firestoreModel.PricesDocument;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.electrices.model;
+package com.example.electrices.model.firestoreModel;
 
 
 import java.util.ArrayList;

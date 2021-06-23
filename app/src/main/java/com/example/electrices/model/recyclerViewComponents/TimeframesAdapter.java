@@ -11,10 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.electrices.R;
-import com.example.electrices.model.StatisticsDocument;
+import com.example.electrices.model.firestoreModel.StatisticsDocument;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 
 // Create the basic adapter extending from RecyclerView.Adapter

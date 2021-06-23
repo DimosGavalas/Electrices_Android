@@ -1,8 +1,10 @@
-package com.example.electrices.model;
+package com.example.electrices.model.firestoreModel;
 
 import java.util.HashMap;
 
 public class ScheduleDocument {
+
+
 
     private HashMap<String, HashMap<String, HashMap<String, Integer>>> daySchedule;
 

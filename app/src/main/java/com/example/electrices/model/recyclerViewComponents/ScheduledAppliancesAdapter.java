@@ -82,7 +82,7 @@ public class ScheduledAppliancesAdapter extends RecyclerView.Adapter<ScheduledAp
         viewHolder.applianceNameTV.setText(applianceSchedule.getApplianceName());
         viewHolder.startTimeTV.setText(applianceSchedule.getTimeScheduled());
         viewHolder.modeTV.setText(String.valueOf(applianceSchedule.getMode()));
-        viewHolder.workCycleTV.setText("2h 15m");
+        viewHolder.workCycleTV.setText(applianceSchedule.getWorkingCycle());
     }
 
     // Returns the total count of items in the list

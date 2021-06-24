@@ -44,15 +44,18 @@ public class FireStoreConnection {
     public interface DocumentListener{
         <D> void onDocumentReady(D document);
     }
-    private DocumentListener documentListener;
+    private static DocumentListener staticDocumentListener;
 
     public interface DocumentUploadListener{
         void onDocumentUploaded(boolean isUploaded);
     }
+
     private DocumentUploadListener documentUploadListener;
 
+// #################### END of Interfaces #######################################
+
     // Following a Singleton pattern
-//    private static FireStoreConnection INSTANCE = null;
+    private static FireStoreConnection INSTANCE = null;
 
     private static final String TAG = "FIRESTORE-CONNECTION";
     private static final String PRICES_COLLECTION = "electricityPrices";
@@ -62,51 +65,31 @@ public class FireStoreConnection {
     private FirebaseFirestore ffDatabase;
 
     // Private constructor for singleton pattern
-    public FireStoreConnection(){
-        documentListener = null;
+    private FireStoreConnection(){
+        documentUploadListener = null;
+        documentUploadListener = null;
         openDBConnection();
     }
 
-    // Singleton pattern
-//    public static FireStoreConnection getInstance(){
-//        if(INSTANCE == null){
-//            INSTANCE = new FireStoreConnection();
-//        }
-//        return INSTANCE;
-//    }
+    // Singleton pattern beacause we need only one instance of the FireStoreConnection class.
+    public static FireStoreConnection getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new FireStoreConnection();
+        }
+        return INSTANCE;
+    }
 
     private void openDBConnection(){
         // Access a Cloud Firestore instance from your Activity
         ffDatabase = FirebaseFirestore.getInstance();
-        Log.i(TAG, String.valueOf(ffDatabase.getApp()));
+//        Log.i(TAG, String.valueOf(ffDatabase.getApp()));
+        Log.i(TAG, String.valueOf(ffDatabase));
     }
 
-
-    // Two ways of reading data from firestore.
-    // ReadData version 1 implements querying in a direct way, applying method over method.
-    // ReadData version 2 starts with creating separetly a Query object and after this it pass it to the get method as in version 1.
-    // This way query functions can be handled easier and reduce rewriting the same code for querying different collections and documents.
-    public void readDataV1(FirebaseFirestore db){
-        db.collection("electricityPrices")
-                .whereEqualTo("Date", "2021-03-10")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.i(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
-                        }
-                    }
-                });
-    }
 
     // ############## Reading Methods #####################
     public void getPricesDocumentForDate(String date){
+        DocumentListener documentListener = this.staticDocumentListener;
         Query querySelectedDatePrices = ffDatabase.collection(PRICES_COLLECTION).whereEqualTo("date", date);
         querySelectedDatePrices
                 .get()
@@ -129,7 +112,9 @@ public class FireStoreConnection {
                 });
     }
 
+
     public void getStatisticsDocumentForDate(String date){
+        DocumentListener documentListener = this.staticDocumentListener;
         Query querySelectedDateStats = ffDatabase.collection(STATISTICS_COLLECTION).whereEqualTo("date", date);
         querySelectedDateStats
                 .get()
@@ -145,6 +130,7 @@ public class FireStoreConnection {
                                     documentListener.onDocumentReady(statisticsDocument);
                                 }
 //                                Log.i(TAG, document.getId() + " => " + document.getData());
+                                Log.i(TAG, "Statistics: " + String.valueOf(document.toObject(ScheduleDocument.class)));
                             }
                         } else {
                             Log.w(TAG, "Error getting STATISTICS documents.", task.getException());
@@ -153,8 +139,10 @@ public class FireStoreConnection {
                 });
     }
 
+
     // Creates a compound prices document where it relates every hourly price with a price level (low, medium, high).
     public void getCompoundPricesDocumentForDate(String date){
+        DocumentListener documentListener = this.staticDocumentListener;
         final PricesDocument[] compoundPricesDocument = {new PricesDocument()};
         Query querySelectedDatePrices = ffDatabase.collection(PRICES_COLLECTION).whereEqualTo("date", date);
         querySelectedDatePrices
@@ -197,26 +185,9 @@ public class FireStoreConnection {
                 });
     }
 
+
     public void getAppliancesScheduleDocumentForDate(String date){
-//        ffDatabase.collection(APPLIANCE_SCHEDULE).document(date)
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                        ScheduleDocument scheduleDocument = new ScheduleDocument();
-//                        if(task.isSuccessful()){
-//                            DocumentSnapshot document = task.getResult();
-//                            scheduleDocument = document.toObject(ScheduleDocument.class);
-//
-//                            if (documentListener != null) {
-//                                documentListener.onDocumentReady(scheduleDocument);
-//                            }
-//
-//                        } else {
-//                            Log.w(TAG, "Error getting Schedule document.", task.getException());
-//                        }
-//                    }
-//                });
+        final DocumentListener documentListener = staticDocumentListener;
         // Use of Snapshot listener for real time data listening.
         ffDatabase.collection(APPLIANCE_SCHEDULE).document(date)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -232,8 +203,9 @@ public class FireStoreConnection {
                             scheduleDocument = snapshot.toObject(ScheduleDocument.class);
                             if (documentListener != null) {
                                 documentListener.onDocumentReady(scheduleDocument);
+                                Log.i(TAG, "LISTENER: " + String.valueOf(documentListener));
                             }
-                            Log.i(TAG, "Current data: " + String.valueOf(snapshot.toObject(ScheduleDocument.class)));
+                            Log.i(TAG, "Scheduled Appliances: " + String.valueOf(snapshot.toObject(ScheduleDocument.class)));
                         } else {
                             Log.d(TAG, "Current data: null");
                         }
@@ -257,7 +229,7 @@ public class FireStoreConnection {
     }
 
     public void setDocumentListener(DocumentListener documentListener) {
-        this.documentListener = documentListener;
+        staticDocumentListener = documentListener;
     }
 
     public void setDocumentUploadListener(DocumentUploadListener documentUploadListener){

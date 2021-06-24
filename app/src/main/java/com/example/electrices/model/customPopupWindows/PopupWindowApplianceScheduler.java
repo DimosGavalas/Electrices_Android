@@ -66,14 +66,16 @@ public class PopupWindowApplianceScheduler {
     private Boolean isReviewCardVisible;
 
     // These two variables are used to get the selected Mode and Time from the inner recycler views.
-    private ApplianceMode mModeSelectionObject;
-    private PricesDocument.PriceLevelHour mTimeSelectionObject;
+//    private ApplianceMode mModeSelectionObject;
+    private ObservableVariable<ApplianceMode> mObservableModeSelectionObject;
+//    private PricesDocument.PriceLevelHour mTimeSelectionObject;
+    private ObservableVariable<PricesDocument.PriceLevelHour> mObservableTimeSelectionObject;
 
     private ObservableVariable<Boolean> obv;
 
 
     public PopupWindowApplianceScheduler(final View view){
-        this.fireStoreConnection = new FireStoreConnection();
+        this.fireStoreConnection = FireStoreConnection.getInstance();
         this.customDateUtility = new CustomDateUtility();
         constructPopupWindow(view);
     }
@@ -187,6 +189,47 @@ public class PopupWindowApplianceScheduler {
                 }
             }
         });
+
+        mObservableModeSelectionObject = new ObservableVariable<>();
+        mObservableTimeSelectionObject = new ObservableVariable<>();
+
+        mObservableModeSelectionObject.setOnChangeListener(new ObservableVariable.OnChangeListener() {
+            @Override
+            public void onChange() {
+                if(mObservableModeSelectionObject.getValue() != null && mObservableTimeSelectionObject.getValue() == null){
+                    retractLayout(mExpandableModeSelection, mCardViewModeSelectionContainer, mTogglerModeSelection);
+                    isModeSelectionExpanded.setValue(false);
+                    expandLayout(mExpandableTimeSelection, mCardViewTimeSelectionContainer, mTogglerTimeSelection);
+                    isTimeSelectionExpanded.setValue(true);
+                }
+
+                if(mObservableModeSelectionObject.getValue() != null && mObservableTimeSelectionObject.getValue() != null){
+                    retractLayout(mExpandableModeSelection, mCardViewModeSelectionContainer, mTogglerModeSelection);
+                    retractLayout(mExpandableTimeSelection, mCardViewTimeSelectionContainer, mTogglerTimeSelection);
+                    isModeSelectionExpanded.setValue(false);
+                    isTimeSelectionExpanded.setValue(false);
+                }
+            }
+        });
+
+        mObservableTimeSelectionObject.setOnChangeListener(new ObservableVariable.OnChangeListener() {
+            @Override
+            public void onChange() {
+                if(mObservableTimeSelectionObject.getValue() != null && mObservableModeSelectionObject.getValue() == null){
+                    retractLayout(mExpandableTimeSelection, mCardViewTimeSelectionContainer, mTogglerTimeSelection);
+                    isTimeSelectionExpanded.setValue(false);
+                    expandLayout(mExpandableModeSelection, mCardViewModeSelectionContainer, mTogglerModeSelection);
+                    isModeSelectionExpanded.setValue(true);
+                }
+
+                if(mObservableModeSelectionObject.getValue() != null && mObservableTimeSelectionObject.getValue() != null){
+                    retractLayout(mExpandableModeSelection, mCardViewModeSelectionContainer, mTogglerModeSelection);
+                    retractLayout(mExpandableTimeSelection, mCardViewTimeSelectionContainer, mTogglerTimeSelection);
+                    isModeSelectionExpanded.setValue(false);
+                    isTimeSelectionExpanded.setValue(false);
+                }
+            }
+        });
     }
 
     private void initializeRecyclerViews(){
@@ -198,7 +241,8 @@ public class PopupWindowApplianceScheduler {
         modeSelectionAdapter.setModeSelectionListener(new ApplianceModeSelectionAdapter.ModeSelectionListener() {
             @Override
             public void onModeSelected(ApplianceMode mode) {
-                mModeSelectionObject = mode;
+//                mModeSelectionObject = mode;
+                mObservableModeSelectionObject.setValue(mode);
 //                Log.i(TAG, "Mode: " + mSelectedModeObject.getmModeName());
 //                Log.i(TAG, "Work Cycle: " + mSelectedModeObject.getmWorkingCycle());
             }
@@ -207,7 +251,6 @@ public class PopupWindowApplianceScheduler {
 
         rvTime = popupView.findViewById(id.recycler_view_schedule_appliance_hours);
         rvTime.setLayoutManager(new LinearLayoutManager(popupViewContext));
-        fireStoreConnection.getCompoundPricesDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
         fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener() {
             @Override
             public <D> void onDocumentReady(D document) {
@@ -219,7 +262,8 @@ public class PopupWindowApplianceScheduler {
                     timeSelectionAdapter.setTimeSelectionListener(new ApplianceTimeSelectionAdapter.TimeSelectionListener() {
                         @Override
                         public void onTimeSelected(PricesDocument.PriceLevelHour priceLevelHourObject) {
-                            mTimeSelectionObject = priceLevelHourObject;
+//                            mTimeSelectionObject = priceLevelHourObject;
+                            mObservableTimeSelectionObject.setValue(priceLevelHourObject);
 //                            Log.i(TAG, "Time: " + mSelectedTimeObject.getTime());
 //                            Log.i(TAG, "Price: " + mSelectedTimeObject.getPrice());
 //                            Log.i(TAG, "Level: " + mSelectedTimeObject.getPrice_level());
@@ -228,7 +272,7 @@ public class PopupWindowApplianceScheduler {
                 }
             }
         });
-
+        fireStoreConnection.getCompoundPricesDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
     }
 
     private void initializeButtons(){
@@ -248,7 +292,8 @@ public class PopupWindowApplianceScheduler {
             @Override
             public void onClick(View v) {
                 // Here make the call to firestore to save the scheduled device.
-                ScheduleDocument scheduleDocument = new ScheduleDocument(mTimeSelectionObject.getTime(), appliance.getAppliance_name(), mModeSelectionObject.getmModeNumber());
+//                ScheduleDocument scheduleDocument = new ScheduleDocument(mTimeSelectionObject.getTime(), appliance.getAppliance_name(), mModeSelectionObject.getmModeNumber());
+                ScheduleDocument scheduleDocument = new ScheduleDocument(mObservableTimeSelectionObject.getValue().getTime(), appliance.getAppliance_name(), mObservableModeSelectionObject.getValue().getmModeNumber());
                 fireStoreConnection.setDocumentUploadListener(new FireStoreConnection.DocumentUploadListener() {
                     @Override
                     public void onDocumentUploaded(boolean isUploaded) {
@@ -323,6 +368,8 @@ public class PopupWindowApplianceScheduler {
     }
 
     // For testing observable variables
+    // Listeners for the confirmation message when both recycler views are retracted.
+    public static final Integer ANIMATIOIN_DURATION = 300;
     private void onVariablesChagnedListener(){
 //        obv = new ObservableVariable<Boolean>();
 //        obv.setOnChangeListener(new ObservableVariable.OnChangeListener() {
@@ -335,15 +382,15 @@ public class PopupWindowApplianceScheduler {
         isModeSelectionExpanded.setOnChangeListener(new ObservableVariable.OnChangeListener() {
             @Override
             public void onChange() {
-                Log.i(TAG, "Mode Expanded !  " + isModeSelectionExpanded.getValue());
-                Log.i(TAG, "Time Expanded !  " + isTimeSelectionExpanded.getValue());
-                Log.i(TAG, "Mode Object !  " + mModeSelectionObject);
-                Log.i(TAG, "Time Object !  " + mTimeSelectionObject);
+//                Log.i(TAG, "Mode Expanded !  " + isModeSelectionExpanded.getValue());
+//                Log.i(TAG, "Time Expanded !  " + isTimeSelectionExpanded.getValue());
+//                Log.i(TAG, "Mode Object !  " + mModeSelectionObject);
+//                Log.i(TAG, "Time Object !  " + mTimeSelectionObject);
                 if(areSchedulingItemsSelected() && !isModeSelectionExpanded.getValue() && !isTimeSelectionExpanded.getValue()){
                     mCardSelectionReview.animate()
                             .scaleX(1f)
                             .scaleY(1f)
-                            .setDuration(400)
+                            .setDuration(ANIMATIOIN_DURATION)
                             .setStartDelay(400)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
@@ -353,8 +400,10 @@ public class PopupWindowApplianceScheduler {
                                 }
                             });
 
-                    mTextViewSelectedMode.setText(mModeSelectionObject.getmModeName());
-                    mTextViewSelectedTime.setText(mTimeSelectionObject.getTime());
+//                    mTextViewSelectedMode.setText(mModeSelectionObject.getmModeName());
+//                    mTextViewSelectedTime.setText(mTimeSelectionObject.getTime());
+                    mTextViewSelectedMode.setText(mObservableModeSelectionObject.getValue().getmModeName());
+                    mTextViewSelectedTime.setText(mObservableTimeSelectionObject.getValue().getTime());
                     Log.i(TAG, "Visibility ON  " );
                     if(!buttonConfirm.isEnabled()){
                         enableButton(buttonConfirm);
@@ -374,15 +423,15 @@ public class PopupWindowApplianceScheduler {
         isTimeSelectionExpanded.setOnChangeListener(new ObservableVariable.OnChangeListener() {
             @Override
             public void onChange() {
-                Log.i(TAG, "Mode Expanded !  " + isModeSelectionExpanded.getValue());
-                Log.i(TAG, "Time Expanded !  " + isTimeSelectionExpanded.getValue());
-                Log.i(TAG, "Mode Object !  " + mModeSelectionObject);
-                Log.i(TAG, "Time Object !  " + mTimeSelectionObject);
+//                Log.i(TAG, "Mode Expanded !  " + isModeSelectionExpanded.getValue());
+//                Log.i(TAG, "Time Expanded !  " + isTimeSelectionExpanded.getValue());
+//                Log.i(TAG, "Mode Object !  " + mModeSelectionObject);
+//                Log.i(TAG, "Time Object !  " + mTimeSelectionObject);
                 if(areSchedulingItemsSelected() && !isModeSelectionExpanded.getValue() && !isTimeSelectionExpanded.getValue()){
                     mCardSelectionReview.animate()
                             .scaleX(1f)
                             .scaleY(1f)
-                            .setDuration(400)
+                            .setDuration(ANIMATIOIN_DURATION)
                             .setStartDelay(400)
                             .setListener(new AnimatorListenerAdapter() {
                                 @Override
@@ -391,8 +440,10 @@ public class PopupWindowApplianceScheduler {
                                     mCardSelectionReview.setVisibility(View.VISIBLE);
                                 }
                             });
-                    mTextViewSelectedMode.setText(mModeSelectionObject.getmModeName());
-                    mTextViewSelectedTime.setText(mTimeSelectionObject.getTime());
+//                    mTextViewSelectedMode.setText(mModeSelectionObject.getmModeName());
+//                    mTextViewSelectedTime.setText(mTimeSelectionObject.getTime());
+                    mTextViewSelectedMode.setText(mObservableModeSelectionObject.getValue().getmModeName());
+                    mTextViewSelectedTime.setText(mObservableTimeSelectionObject.getValue().getTime());
                     Log.i(TAG, "Visibility ON  " );
                     if(!buttonConfirm.isEnabled()){
                         enableButton(buttonConfirm);
@@ -414,7 +465,10 @@ public class PopupWindowApplianceScheduler {
 
     // Checking if Mode and Time has been selected.
     private boolean areSchedulingItemsSelected(){
-        if(mModeSelectionObject != null && mTimeSelectionObject != null){
+//        if(mModeSelectionObject != null && mTimeSelectionObject != null){
+//            return true;
+//        }
+        if(mObservableModeSelectionObject.getValue() != null && mObservableTimeSelectionObject.getValue() != null){
             return true;
         }
         return false;

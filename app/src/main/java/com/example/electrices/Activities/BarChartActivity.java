@@ -60,30 +60,10 @@ public class BarChartActivity extends AppCompatActivity {
         initDatePickerDialog();
         dateButtonSetup();
 
-//        Log.i(TAG, "onCreate => " + getTodaysDateForFirestoreQuery());
-
-        fireStoreConnection = new FireStoreConnection();
+        initFirestoreConnection();
+        setFirestoreOnDocumentReadyListeners();
+        // getting firestore data
         fireStoreConnection.getPricesDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
-//        fireStoreConnection.getDocumentForDate(getTodaysDateForFirestoreQuery());
-
-        // When the above method finishes the below listener will fire up.
-        // This means that the barchart will be constructed and show up when the data has been downloaded.
-        fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener(){
-            @Override
-            public <D> void onDocumentReady(D document) {
-                pricesDocument = (PricesDocument) document;
-                Log.i(TAG, "onDocumentReady => " + String.valueOf(document));
-
-                barEntries_prices = barEntriesSetup();
-
-                barDataSet = new BarDataSet(barEntries_prices, "Øre / kWh");
-                barDataSetConfig(barDataSet);
-
-                barData = new BarData(barDataSet);
-                barChart.setData(barData);
-                barChartConfig(barChart);
-            }
-        });
     }
     /* On Create END */
 
@@ -202,4 +182,28 @@ public class BarChartActivity extends AppCompatActivity {
         dateButton.setText(customDateUtility.getTodaysDate());
     }
 
+    private void initFirestoreConnection(){
+        fireStoreConnection = FireStoreConnection.getInstance();
+    }
+
+    private void setFirestoreOnDocumentReadyListeners(){
+        // When the above method finishes the below listener will fire up.
+        // This means that the barchart will be constructed and show up when the data has been downloaded.
+        fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener(){
+            @Override
+            public <D> void onDocumentReady(D document) {
+                pricesDocument = (PricesDocument) document;
+                Log.i(TAG, "onDocumentReady => " + String.valueOf(document));
+
+                barEntries_prices = barEntriesSetup();
+
+                barDataSet = new BarDataSet(barEntries_prices, "Øre / kWh");
+                barDataSetConfig(barDataSet);
+
+                barData = new BarData(barDataSet);
+                barChart.setData(barData);
+                barChartConfig(barChart);
+            }
+        });
+    }
 }

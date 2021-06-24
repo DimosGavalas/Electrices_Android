@@ -85,6 +85,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         customDateUtility = new CustomDateUtility();
+        fireStoreConnection = FireStoreConnection.getInstance();
 
         MaterialButton button_drop_down = findViewById(R.id.button_dropdown_price_levels);
         dropDownSetup(button_drop_down);
@@ -104,9 +105,9 @@ public class HomeActivity extends AppCompatActivity {
         rvScheduledAppliances = findViewById(R.id.recycler_view_scheduled_appliances);
         rvScheduledAppliances.setLayoutManager(new LinearLayoutManager(this));
 
+//        new FireStoreConnection();
+//        FireStoreConnection ffStaticInstance = FireStoreConnection.getInstance();
 
-        fireStoreConnection = new FireStoreConnection();
-        fireStoreConnection.getStatisticsDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
         // When the above method gets the document the below listener will fire up.
         fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener(){
             @Override
@@ -129,29 +130,26 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
-
+        fireStoreConnection.getStatisticsDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
 
        /*
        @TODO
        Database structure needs to be fixed first because creates a chaos in the code implementation.
        */
-        FireStoreConnection fireStoreConnection1 = new FireStoreConnection();
-//        fireStoreConnection1.getAppliancesScheduleDocumentForDate("2021-06-22");
-        fireStoreConnection1.getAppliancesScheduleDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
-        fireStoreConnection1.setDocumentListener(new FireStoreConnection.DocumentListener() {
+        fireStoreConnection.setDocumentListener(new FireStoreConnection.DocumentListener() {
             @Override
             public <D> void onDocumentReady(D document) {
-                if(document instanceof ScheduleDocument){
+                if (document instanceof ScheduleDocument) {
                     ScheduleDocument scheduleDocument = (ScheduleDocument) document;
                     Log.i(TAG, String.valueOf(scheduleDocument.getDaySchedule()));
 
                     ArrayList<ApplianceSchedule> applianceScheduleList = new ArrayList<>();
 
                     // Iterating through the schedule hashmap
-                    for(Map.Entry mapItemTime : scheduleDocument.getDaySchedule().entrySet()){
+                    for (Map.Entry mapItemTime : scheduleDocument.getDaySchedule().entrySet()) {
                         String scheduledTime = (String) mapItemTime.getKey();
                         HashMap<String, HashMap<String, Integer>> scheduledAppliances = (HashMap<String, HashMap<String, Integer>>) mapItemTime.getValue();
-                        for(Map.Entry mapItemAppliance : scheduledAppliances.entrySet()){
+                        for (Map.Entry mapItemAppliance : scheduledAppliances.entrySet()) {
                             String applianceName = (String) mapItemAppliance.getKey();
                             HashMap<String, Integer> mode = (HashMap<String, Integer>) mapItemAppliance.getValue();
 
@@ -163,10 +161,10 @@ public class HomeActivity extends AppCompatActivity {
 
                     ScheduledAppliancesAdapter scheduledAppliancesAdapter = new ScheduledAppliancesAdapter(applianceScheduleList);
                     rvScheduledAppliances.setAdapter(scheduledAppliancesAdapter);
-
                 }
             }
         });
+        fireStoreConnection.getAppliancesScheduleDocumentForDate(customDateUtility.getTodaysDateForFirestoreQuery());
     }
 
 
